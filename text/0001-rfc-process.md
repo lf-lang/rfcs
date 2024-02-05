@@ -409,7 +409,7 @@ architecture.
 
 - Which license should we use for RFCs in this repository?
 - How can we send out FCPs to all interested parties? (The mailing list would
-  work, put currently there is no way for people to subscribe)
+  work, but currently there is no way for people to subscribe)
 
 # Future possibilities
 [future-possibilities]: #future-possibilities
