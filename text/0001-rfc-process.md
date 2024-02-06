@@ -321,11 +321,11 @@ A few examples of what this can include are:
 - For other teams: What lessons can we learn from what other communities have done here?
 - Papers: Are there any published papers or great posts that discuss this? If you have some relevant papers to refer to, this can serve as a more detailed theoretical background.
 
-This section is intended to encourage you as an author to think about the lessons from other languages and frameworks, provide readers of your RFC with a fuller picture.
+This section is intended to encourage you as an author to think about the lessons from other languages and frameworks, and to provide readers of your RFC with a fuller picture.
 If there is no prior art, that is fine - your ideas are interesting to us whether they are brand new or if it is an adaptation from solutions.
 
 Note that while precedent set by other languages is some motivation, it does not on its own motivate an RFC.
-Please also take into consideration that rust sometimes intentionally diverges from common language features.
+Please also take into consideration that Lingua Franca sometimes intentionally diverges from common language features.
 
 # Unresolved questions
 [unresolved-questions]: #unresolved-questions
@@ -381,7 +381,7 @@ RFCs.
 
 A variation of the proposed RFC process has been used successfully by the Rust
 community for the last 10 years. The process is intended to enforce a more
-disciplined approach wile being as light-weight as possible. The main rationale
+disciplined approach while being as light-weight as possible. The main rationale
 for this proposal is to adapt an established and successful RFC process to the
 LF community. This proposal is intended as a starting point. Likely, the
 proposed process will not fit exactly our needs and can be modified in future
