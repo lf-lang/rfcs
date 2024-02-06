@@ -172,7 +172,7 @@ Franca.
 ## The RFC life-cycle
 [The RFC life-cycle]: #the-rfc-life-cycle
 
-Once an RFC becomes "active" then authors may implement it and submit the
+Once an RFC becomes "active," anyone may submit an implementation of the
 feature as a pull request to the relevant repo. Being "active" is not a rubber
 stamp, and in particular still does not mean the feature will ultimately be
 merged; it does mean that in principle all the major stakeholders have agreed
