@@ -1,10 +1,10 @@
 - Feature Name: `rfc_process`
 - Start Date: 2024-02-05
 - RFC PR: [lf-lang/rfcs#2](https://github.com/lf-lang/rfcs/pull/2)
-- Tracking Issue: None
+- Tracking Issue(s): None
 
-# Summary
-[summary]: #summary
+# Abstract
+[abstract]: #abstract
 
 Establish a Request for Comments (RFC) process. The RFC process is intended to
 provide a consistent and controlled path for proposing new features to the
@@ -38,10 +38,17 @@ and controlled path for changes to Lingua Franca (such as new features) so that 
 stakeholders can be confident about the direction of the project.
 
 Many changes, including bug fixes and documentation improvements can be
-implemented and reviewed via the normal GitHub pull request workflow.
+implemented and reviewed via the normal GitHub pull request workflow. Some
+changes though are "substantial", and we ask that these be put through a bit of
+a design process and produce a consensus among the Lingua Franca community.
 
-Some changes though are "substantial", and we ask that these be put through a
-bit of a design process and produce a consensus among the Lingua Franca community.
+The RFCs are not intended as a complete specification. Active RFCs are a form of
+documentation that describe the design of features that are considered feasible
+and relevant by the community. As requirements change and rarely a design
+proposal can reflect the end result precisely, RFCs should be amended or
+replaced as needed during the implementation process. At any time, the list of
+active RFCs presents a snapshot of the communities view on the state of the
+project and its potential next steps.
 
 ## Table of Contents
 [Table of Contents]: #table-of-contents
@@ -143,9 +150,9 @@ Franca.
   - At some point, a member of the team will propose a "motion for final
     comment period" (FCP), along with a *disposition* for the RFC (merge, close,
     or postpone).
-    - This step is taken when enough of the tradeoffs have been discussed that
+    - This step is taken when enough of the tradeoffs have been discussed and a rough consensus has been reached, so that
       the core team is in a position to make a decision. That does not require
-      consensus amongst all participants in the RFC thread (which is usually
+      consensus among all participants in the RFC thread (which is usually
       impossible). However, the argument supporting the disposition on the RFC
       needs to have already been clearly articulated, and there should not be a
       strong consensus *against* that position. Team members use their best
@@ -190,7 +197,7 @@ Modifications to "active" RFCs can be done in follow-up pull requests. We
 strive to write each RFC in a manner that it will reflect the final design of
 the feature; but the nature of the process means that we cannot expect every
 merged RFC to actually reflect what the end result will be at the time of the
-next major release.
+next release.
 
 In general, once accepted, RFCs should not be substantially changed. Only very
 minor changes should be submitted as amendments. More substantial changes
@@ -260,10 +267,10 @@ Text to be placed in `0000_template.md`:
 - Feature Name: (fill me in with a unique ident, `my_awesome_feature`)
 - Start Date: (fill me in with today's date, YYYY-MM-DD)
 - RFC PR: [lf-lang/rfcs#0000](https://github.com/lf-lang/rfcs/pull/0000)
-- Tracking Issue: [lf-lang/lingua-franca#0000](https://github.com/lf-lang/lingua-franca/issues/0000)
+- Tracking Issue(s): [lf-lang/lingua-franca#0000](https://github.com/lf-lang/lingua-franca/issues/0000)
 
-# Summary
-[summary]: #summary
+# Abstract
+[abstract]: #abstract
 
 One paragraph explanation of the feature.
 
@@ -374,7 +381,14 @@ RFCs.
 # Drawbacks
 [drawbacks]: #drawbacks
 
-- RFCs impose a more formal style and potentially could slow down development.
+- RFCs impose a more formal style of designing and discussion new features,
+  which potentially could slow down development.
+- RFCs could be interpreted as a strict specification and implemented in a
+  water-fall style without considering changing requirements and new insights
+  gained from the implementation.
+- RFCs focus on the design, not an implementation. Thus, active RFCs will rarely
+  describe the end-result and need to be adjusted when the feature gets
+  implemented.
 
 # Rationale and alternatives
 [rationale-and-alternatives]: #rationale-and-alternatives
@@ -387,6 +401,17 @@ LF community. This proposal is intended as a starting point. Likely, the
 proposed process will not fit exactly our needs and can be modified in future
 RFCs.
 
+In order to be light-weight, the proposed process only considers the design of a
+feature and does not require an implementation. This allows to focus on the
+high-level implications of a proposal as part of the RFC process, while the
+implementation details can be discussed in specific PRs in the code
+repositories. When new insights are gained from an implementation, those should
+be reflected in updates to the RFC.
+
+Alternatively, we could incorporate the implementation process into the RFC
+process. This would significantly prolong the process, but ensure that new
+insights from the implementation are directly reflected in the RFC discussion.
+
 There are many potential alternatives to the proposed RFC process. The [Python
 enhancement proposals (PEPs)](https://peps.python.org/pep-0001/), for instance,
 uses a more formal process and it is challenging for a new PEP to be accepted.
@@ -398,11 +423,13 @@ process. This approach, however, will likely not scale to a larger community and
 harden the problems we are facing with respect to an overarching design and
 architecture.
 
+
 # Prior art
 [prior-art]: #prior-art
 
 - The proposed RFC process is heavily inspired (this is not to say shamelessly copied) from the [Rust community](https://github.com/lf-lang/rfcs)
 - Python uses [PEP (Python enhancement proposals)](https://peps.python.org/pep-0001/), which is similar to the idea of RFCs but slightly more formal.
+- The IETF RFC process is explained [here](https://www.ietf.org/standards/process/informal/).
 
 # Unresolved questions
 [unresolved-questions]: #unresolved-questions
@@ -410,6 +437,7 @@ architecture.
 - Which license should we use for RFCs in this repository?
 - How can we send out FCPs to all interested parties? (The mailing list would
   work, but currently there is no way for people to subscribe)
+- Should we require that an RFC is substantiated by a proof-of-concept implementation?
 
 # Future possibilities
 [future-possibilities]: #future-possibilities
@@ -426,3 +454,15 @@ sub-team and is mostly discussed within this team, which may also involve
 stakeholders outside of the team. When the LF community scales we may consider
 using a similar approach and assign clearer responsibilities.
 
+- The line between changes that can be done in a simple PR and more substantial
+  changes that require an RFC is blurry. In fact, there might be changes where
+  RFCs cause too much of an overhead while a PR does not provide enough room for
+  up-front discussion. In this case, other processes that focus on specific
+  aspects of the project, i.e. the architecture of the compiler, can be
+  introduced and adjusted to the specific requirements of the sub-community.
+
+- The proposed process and template are merely a starting point. It can (and
+  should) be adjusted to our needs once we gain more experience.
+
+- The RFC process does not consider how we can achieve a level of feature parity
+  between the targets. This aspect could be considered in future RFCs.
