@@ -90,7 +90,7 @@ Some changes do not require an RFC:
   - Additions that strictly improve objective, numerical quality criteria
     (warning removal, speedup, better platform coverage, more parallelism, etc.)
   - Additions only likely to be noticed by other developers and invisible to users of Lingua Franca.
-  - Trivial changes that can be implemented and discusssed in a single PR.
+  - Trivial changes that can be implemented and discussed in a single PR.
 
 If you submit a pull request to implement a new feature without going through
 the RFC process, it may be closed with a polite request to submit an RFC first.
