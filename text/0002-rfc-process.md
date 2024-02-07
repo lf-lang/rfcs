@@ -62,7 +62,6 @@ project and its potential next steps.
   - [Reviewing RFCs]
   - [Implementing an RFC]
   - [RFC Postponement]
-  - [Help this is all too informal!]
   - [License]
   - [Contributions]
 
@@ -81,15 +80,17 @@ may include the following.
   - Changes to the interface between the compiler and the runtime libraries.
   - Changes to the interfaces between other components of the LF ecosystem, e.g., the language server.
   - New user facing features in the IDEs and related tools.
+  - Changes to the graphical syntax of Lingua Franca.
+  - Changes thas require signifcant updates of the handbook.
 
 Some changes do not require an RFC:
 
   - Rephrasing, reorganizing, refactoring, or otherwise "changing shape does
     not change meaning".
   - Additions that strictly improve objective, numerical quality criteria
-    (warning removal, speedup, better platform coverage, more parallelism, trap
-    more errors, etc.)
+    (warning removal, speedup, better platform coverage, more parallelism, etc.)
   - Additions only likely to be noticed by other developers and invisible to users of Lingua Franca.
+  - Trivial changes that can be implemented and discusssed in a single PR.
 
 If you submit a pull request to implement a new feature without going through
 the RFC process, it may be closed with a polite request to submit an RFC first.
@@ -430,6 +431,7 @@ architecture.
 - The proposed RFC process is heavily inspired (this is not to say shamelessly copied) from the [Rust community](https://github.com/lf-lang/rfcs)
 - Python uses [PEP (Python enhancement proposals)](https://peps.python.org/pep-0001/), which is similar to the idea of RFCs but slightly more formal.
 - The IETF RFC process is explained [here](https://www.ietf.org/standards/process/informal/).
+- Many companies use RFCs internally. For instance Uber has used RFCs sucessfully to scale from a small team to a thousand engineers as described [here](https://blog.pragmaticengineer.com/scaling-engineering-teams-via-writing-things-down-rfcs/).
 
 # Unresolved questions
 [unresolved-questions]: #unresolved-questions
@@ -437,7 +439,6 @@ architecture.
 - Which license should we use for RFCs in this repository?
 - How can we send out FCPs to all interested parties? (The mailing list would
   work, but currently there is no way for people to subscribe)
-- Should we require that an RFC is substantiated by a proof-of-concept implementation?
 
 # Future possibilities
 [future-possibilities]: #future-possibilities
