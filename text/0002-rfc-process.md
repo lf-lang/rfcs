@@ -1,7 +1,7 @@
 - Feature Name: `rfc_process`
 - Start Date: 2024-02-05
-- RFC PR: [lf-lang/rfcs#1](https://github.com/lf-lang/rfcs/pull/1)
-- Tracking Issue: [lf-lang/lf#0000](https://github.com/lf-lang/lf/issues/0000)
+- RFC PR: [lf-lang/rfcs#2](https://github.com/lf-lang/rfcs/pull/2)
+- Tracking Issue: None
 
 # Summary
 [summary]: #summary
