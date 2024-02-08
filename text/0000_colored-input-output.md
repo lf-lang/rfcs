@@ -7,17 +7,19 @@
 [abstract]: #abstract
 
 Magnition mentioned that input and output ports are hard to differentiate if they are placed on the same reactor side.
-Additionally, edges become hard to follow if in large diagrams.
-This is currently not solved by the highlighting mechanism since it highlights the edges by making them thick, which results in the same thickness as the busses.
+
+Additionally, edges become hard to follow in large diagrams.
+This is currently not solved by the edge highlighting mechanism since it highlights the edges by making them thick, which is very hard to spot since a bus is already drawn with a thick line.
 
 # Motivation
 [motivation]: #motivation
 
-We want to add color to make it easier to work with large LF models to make them easier to recognize ports or edges if many objects are on the screen.
+We want to add color to make it easier to work with large LF models.
+If elements are very small, color might help us to differentiate them.
 This is even more important if we trade layout stability for edge crossings.
 
 Moreover, I want to test this process with a smaller RFC and see if it fits.
-I my opinion this is something to be discussed but I intentionally put two different things in here, since I do not want to do an RFC for them both and they are both effect the color scheme.
+In my opinion the topic above is something to be discussed and I intentionally put two different things in here, since I do not want to do an RFC for them both and they both affect the color scheme.
 
 # Guide-level explanation
 [guide-level-explanation]: #guide-level-explanation
@@ -39,25 +41,27 @@ This could be added as a hook in the synthesis to add the necessary options and 
 # Drawbacks
 [drawbacks]: #drawbacks
 
-Too much color might be distracting and additional synthesis options might clutter of the sidebar.
+Too much color might be distracting and additional synthesis options might clutter the sidebar.
 However, edge highlighting would only occur when one clicks on an edge.
 More synthesis options might not be that distracting once klighd-vscode adds favorites to the sidebar.
 
 # Rationale and alternatives
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-- We could also experiment different port shapes to differentiate them.
+- We could also experiment different port shapes to differentiate the ports.
+- One could also use a different line style to highlight edges. I am however unsure whether this is enough if drawn line is very thin (since the diagram itself is big).
 
 # Prior art
 [prior-art]: #prior-art
 
 - SCCharts uses a light blue to highlight clicked edges
+- In my opinion the Magnition has created the only big LF models, hence I take their feedback seriously.
 
 
 # Unresolved questions
 [unresolved-questions]: #unresolved-questions
 
-- I would suggest either a blue or orange for highlighting but I am not fixed on that decision
+- I would suggest either a blue or orange for highlighting
 - Colors for ports are still up for discussion, maybe black for input and black border with white fill for outputs?
 
 # Future possibilities
