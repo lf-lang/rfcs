@@ -79,13 +79,13 @@ may include the following.
   - Removing language features.
   - Changes to the interface between the compiler and the runtime libraries.
   - Changes to the interfaces between other components of the LF ecosystem, e.g., the language server.
-  - New user facing features in the IDEs and related tools.
+  - New user-facing features in the IDEs and related tools.
   - Changes to the graphical syntax of Lingua Franca.
-  - Changes thas require signifcant updates of the handbook.
+  - Changes that require significant updates of the handbook.
 
 Some changes do not require an RFC:
 
-  - Rephrasing, reorganizing, refactoring, or otherwise "changing shape does
+  - Rephrasing, reorganizing, refactoring, or otherwise "changing shape that does
     not change meaning".
   - Additions that strictly improve objective, numerical quality criteria
     (warning removal, speedup, better platform coverage, more parallelism, etc.)
@@ -98,15 +98,15 @@ the RFC process, it may be closed with a polite request to submit an RFC first.
 ## Before creating an RFC
 [Before creating an RFC]: #before-creating-an-rfc
 
-A hastily-proposed RFC can hurt its chances of acceptance. Low quality
-proposals, proposals for previously-rejected features, or those that don't fit
-into the near-term roadmap, may be quickly rejected, which can be demotivating
+A hastily-proposed RFC can hurt its chances of acceptance. Low-quality
+proposals, proposals for previously-rejected features, or proposals that don't fit
+into the near-term roadmap may be quickly rejected, which can be demotivating
 for the unprepared contributor. Laying some groundwork ahead of the RFC can
 make the process smoother.
 
 Although there is no single way to prepare for submitting an RFC, it is
 generally a good idea to pursue feedback from other project developers
-beforehand, to ascertain that the RFC may be desirable; having a consistent
+beforehand to ascertain that the RFC may be desirable. Having a consistent
 impact on the project requires concerted effort toward consensus-building.
 You may talk the idea over on our [official Zulip server](https://lf-lang.zulipchat.com/)
 or file issues on this repo for discussion.
@@ -118,14 +118,14 @@ developers is a good indication that the RFC is worth pursuing.
 [What the process is]: #what-the-process-is
 
 In short, to get a major feature added to Lingua Franca, one must first get the
-RFC merged into the RFC repository as a markdown file. At that point the RFC is
+RFC merged into the RFC repository as a Markdown file. At that point the RFC is
 "active" and may be implemented with the goal of eventual inclusion into Lingua
 Franca.
 
   - Fork the RFC repo [RFC repository]
   - Copy `0000-template.md` to `text/0000-my-feature.md` (where "my-feature" is
-    descriptive). Don't assign an RFC number yet; This is going to be the PR
-    number and we'll rename the file accordingly if the RFC is accepted.
+    descriptive). Don't assign an RFC number yet; this is going to be the PR
+    number, and we'll rename the file accordingly if the RFC is accepted.
   - Fill in the RFC. Put care into the details: RFCs that do not present
     convincing motivation, demonstrate lack of understanding of the design's
     impact, or are disingenuous about the drawbacks or alternatives tend to
@@ -182,8 +182,8 @@ Franca.
 
 Once an RFC becomes "active," anyone may submit an implementation of the
 feature as a pull request to the relevant repo. Being "active" is not a rubber
-stamp, and in particular still does not mean the feature will ultimately be
-merged; it does mean that in principle all the major stakeholders have agreed
+stamp, and in particular it still does not mean the feature will ultimately be
+merged. However, it does mean that in principle, all the major stakeholders have agreed
 to the feature and are amenable to merging it.
 
 Furthermore, the fact that a given RFC has been accepted and is "active"
@@ -191,7 +191,7 @@ implies nothing about what priority is assigned to its implementation, nor does
 it imply anything about whether a developer has been assigned the task of
 implementing the feature. While it is not *necessary* that the author of the
 RFC also write the implementation, it is by far the most effective way to see
-an RFC through to completion: authors should not expect that other project
+an RFC through to completion: Authors should not expect that other project
 developers will take on responsibility for implementing their accepted feature.
 
 Modifications to "active" RFCs can be done in follow-up pull requests. We
@@ -388,7 +388,7 @@ RFCs.
   water-fall style without considering changing requirements and new insights
   gained from the implementation.
 - RFCs focus on the design, not an implementation. Thus, active RFCs will rarely
-  describe the end-result and need to be adjusted when the feature gets
+  describe the end result and may often need to be adjusted when the feature gets
   implemented.
 
 # Rationale and alternatives
@@ -402,7 +402,7 @@ LF community. This proposal is intended as a starting point. Likely, the
 proposed process will not fit exactly our needs and can be modified in future
 RFCs.
 
-In order to be light-weight, the proposed process only considers the design of a
+In order to be lightweight, the proposed process only considers the design of a
 feature and does not require an implementation. This allows to focus on the
 high-level implications of a proposal as part of the RFC process, while the
 implementation details can be discussed in specific PRs in the code
@@ -448,7 +448,7 @@ community. However, for now, we should try to establish a process that works for
 us (and refine it) before automating the process.
 
 - We can automatically generate a website that lists all active RFCs. The Rust
-community uses mdbook for this.
+community uses mdBook for this.
 
 - The Rust community is split into sub-teams. Each RFC gets assigned to a
 sub-team and is mostly discussed within this team, which may also involve
