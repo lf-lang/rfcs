@@ -1,6 +1,6 @@
 - Feature Name: `template-type-passing-inheritance`
 - Start Date: 2024-02-09
-- RFC PR: [lf-lang/rfcs#0001](https://github.com/lf-lang/rfcs/pull/0001)
+- RFC PR: [lf-lang/rfcs#0004](https://github.com/lf-lang/rfcs/pull/4)
 - Tracking Issue (s): [lf-lang/lingua-franca#0001](https://github.com/lf-lang/lingua-franca/issues/0001)
 
 # Abstract

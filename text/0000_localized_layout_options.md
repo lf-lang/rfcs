@@ -1,6 +1,6 @@
 - Feature Name: `localized-layout-options`
 - Start Date: 2024-02-09
-- RFC PR: [lf-lang/rfcs#0000](https://github.com/lf-lang/rfcs/pull/0000)
+- RFC PR: [lf-lang/rfcs#0004](https://github.com/lf-lang/rfcs/pull/4)
 - Tracking Issue (s): [lf-lang/lingua-franca#0000](https://github.com/lf-lang/lingua-franca/issues/0000)
 
 # Abstract
