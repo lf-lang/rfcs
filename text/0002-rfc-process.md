@@ -73,9 +73,9 @@ Detailed explanations of the steps can be found [here](#the-rfc-process).
 
 ### Goals
 
-- Create a platform for proposing ideas and features, receiving feedback and
-  suggestions for improvement, and quickly iterating towards an improved design.
-  Timely is more important than perfect.
+- Create a platform for proposing ideas and features, receiving feedback, and
+  quickly iterating towards an improved design. Timely is more important than
+  perfect.
 - Establish a record of the relevant design considerations and decisions. This
   is an important piece of documentation, as it allows us to find and reference
   past design considerations and is a valuable resource for new contributors.
