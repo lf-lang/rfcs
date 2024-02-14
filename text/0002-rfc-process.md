@@ -36,8 +36,10 @@ Text to be placed in the README of this repository:
 The "RFC" (request for comments) process is a framework for managing both
 historical and planned changes within the LF community. The record of active
 RFCs tells the story of our project, our technology and our thought process.
-We believe in an honest dialog between all contributors and stakeholders within
-the community.
+We believe in an honest and open dialog between all contributors and
+stakeholders within the community. The RFC process establishes accountability,
+helps to identify and moderate conflicts in interest within the community, and
+builds confidence in the direction the language and the tooling are evolving in.
 
 Many changes, including bug fixes and documentation improvements can be
 implemented and reviewed via the normal GitHub pull request workflow. However,
