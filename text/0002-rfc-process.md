@@ -33,19 +33,19 @@ Text to be placed in the README of this repository:
 
 [Lingua Franca RFCs]: #lf-rfcs
 
-The "RFC" (request for comments) process is a framework for managing both
+The RFC (request for comments) process is a framework for managing both
 historical and planned changes within the LF community. The record of active
 RFCs tells the story of our project, our technology and our thought process.
 We believe in an honest and open dialog between all contributors and
 stakeholders within the community. The RFC process establishes accountability,
-helps to identify and moderate conflicts in interest within the community, and
+helps to identify and moderate conflicts of interest within the community, and
 builds confidence in the direction the language and the tooling are evolving in.
 
-Many changes, including bug fixes and documentation improvements can be
+Many changes, including bug fixes and documentation improvements, can be
 implemented and reviewed via the normal GitHub pull request workflow. However,
 some changes are more substantial and we ask to put them through a bit of a
 design process. In particular, changes that impact other contributors or
-stakeholders in the LF community or changes that considerably change the user
+stakeholders in the LF community or changes that considerably impact the user
 experience. See [When you need to follow this process] for more details.
 
 ## Table of Contents
@@ -70,14 +70,14 @@ experience. See [When you need to follow this process] for more details.
   suggestions for improvement, and quickly iterating towards an improved design.
   Timely is more important than perfect.
 - Establish a record of the relevant design considerations and decisions. This
-  is an important piece of documentation as it allows us to find and reference
-  past design considerations and is a valuable resource for newcomers in the team.
+  is an important piece of documentation, as it allows us to find and reference
+  past design considerations and is a valuable resource for new contributors.
 - Provide a process for producing a consensus among the contributors and
   stakeholders directly affected by the proposed change. For substantial changes
   to the semantics or the textual and graphical syntax of the language, the
   community as a whole should be involved.
-- Make submitting RFCs enjoyable. Ideally the RFC process should be perceived as
-  a supporting tool that helps submitters to asses the feasibility of an idea
+- Make submitting RFCs enjoyable. Ideally, the RFC process should be perceived as
+  a supporting tool that helps submitters to assess the feasibility of an idea
   early on (before sinking time into an implementation) and by helping to
   improve the design.
 
@@ -85,19 +85,19 @@ experience. See [When you need to follow this process] for more details.
 
 - Slowing down development unnecessarily, creating significant overhead, or
   requiring wide consensus on every decision. The process should be flexible
-  enough to adapt to the concrete scope and impact of a proposal and only
-  require a wide consensus for changes that impact large parts of the community.
+  enough to adapt to the concrete scope and impact of a proposal, and only
+  require a wider consensus for changes that impact large parts of the community.
 - Specification or even standardization of language features and interfaces. If
   we decide to create specifications for certain aspects of the language and the
-  infrastructure, this is should be done in another process, as specification
+  infrastructure, this should be done in another process, as specification
   incurs a considerably larger overhead. Assuming that we establish a
   specification process, RFCs could still play a role in it, e.g., for early
   discussion of additions to the specification.
 - Establishing a waterfall model for software design. While RFCs could be
-  interpreted as a specification, they explicitly are not. On the contrary, RFCs
+  interpreted as specifications, they explicitly are not. On the contrary, RFCs
   are intended as a tool for iterating on ideas quickly and more frequently,
   even before there is an implementation.
-- Discussing complete implementations. For this we have PRs.
+- Discussing complete implementations. For this, we have PRs.
 
 
 ## The RFC Process
@@ -124,43 +124,43 @@ Fill in the current date in the top section, but leave the RFC PR and tracking
 issue unchanged for now. Fill in the sections of the template to start your
 proposal.
 
-Don't overthink the proposal or aim for being perfect. The idea of the RFC
+Don't overthink the proposal or aim for perfection. The idea of the RFC
 process is to receive feedback quickly and iterate frequently. Indicate any open
 questions that you are aware of.
 
 #### Receiving early feedback and collaborative editing
 
 Create a new branch (the branch name should be identical to the short name you
-chose for the proposal file), commit your new proposal and push it to this
+chose for the proposal file), commit your new proposal, and push it to this
 repository or to your own fork. Share the link to your new file with your peers
-to invite others do collaborate on the proposal or ask for early feedback.
-Ideally this involves one of the more senior contributors, who can help to avoid
-larger pitfalls. If you are new to the community and don't know who to reach out
+to invite others to collaborate on the proposal or ask for early feedback.
+Ideally, this involves one of the more senior contributors, who can help to avoid
+larger pitfalls. If you are new to the community and don't know whom to reach out
 to, drop a message in our [Zulip](https://lf-lang.zulipchat.com/). The proposal
 does not need to be perfect (timely is more important than perfect), but you
 should clearly identify any gaps that you are aware of.
 
-At this early stage using git and GitHub is merely a suggestion. You may also
+At this early stage, using git and GitHub is merely a suggestion. You may also
 choose other forms of exchanging ideas with your peers and collaborating on a
 text document.
 
 #### Opening a pull request
 
-Once you have build trust in your proposal and are ready to receive feedback
+Once you have built trust in your proposal and are ready to receive feedback
 from a wider audience, it is time to open a pull request on this repository.
 Once you have opened the PR, replace `0000` in the file name of your RFC with
 the PR number and insert a link to the PR at the top of your RFC.
 
 Opening a PR will allow the stakeholders and interested community members to
-review your proposal and to raise concerns or make suggestions. We will also
-assign a [shepherd](#role-of-the-shepherd) to your PR who helps managing the
+review your proposal and raise concerns or make suggestions. We will also
+assign a [shepherd](#role-of-the-shepherd) to your PR who helps manage the
 remaining process. At this stage, the shepherd should request reviews from
 relevant stakeholders and community members that are affected by or generally
 interested in the RFC.
 
 #### Addressing feedback
 
-Reviewers will share there valuable thoughts and opinions. Aim to address this
+The reviewers will share their valuable thoughts and opinions. Aim to address this
 feedback and, if necessary, make changes to the RFC in order to help reach a
 consensus. The shepherd may help to moderate the discussion if needed.
 
@@ -169,9 +169,9 @@ request explaining your changes. Specifically, do not squash or rebase commits
 after they are visible on the pull request.
 
 Not every concern raised by a reviewer is an indication of a bad design and
-requires a significant change to the RFC. No solution is perfect and usually
-there are trade-offs involved. Thus addressing a concern can be as simple as
-acknowledging it as a drawback in the RFC document. Again: timeliness and
+requires a significant change to the RFC. No solution is perfect, and usually,
+there are trade-offs involved. Thus, addressing a concern can be as simple as
+acknowledging it as a drawback in the RFC document. Again, timeliness and
 frequent iteration are more important than being perfect.
 
 If the RFC is discussed during a meeting, notes and a summary of the meeting
@@ -191,7 +191,7 @@ are three options:
    wrap up the discussion. The shepherd may set a deadline until which final
    comments should be made, but must ensure that this deadline can be met by the
    stakeholders. If the reviewers agree with the disposition, the PR gets merged
-   in case of accept or closed in case of reject.
+   in the case of acceptance or closed in case of rejection.
 > **Open Question:** What exactly should be required to reach a decision?
 > Majority? Unanimously? Not more than two objections?
 3. For RFCs that require due diligence, as they propose considerable changes to
@@ -200,8 +200,8 @@ are three options:
    extended slightly. If the reviewers agree on a disposition to accept, the
    shepherd announces a final comment period (FCP) on the mailing list and in
    the Zulip chat. This gives everyone in the community a chance to raise
-   additional concerns. The final comment period lasts 10 days and, if no now
-   concerns are brought, up the shepherd merges the PR once the 10 days have
+   additional concerns. The final comment period lasts 10 days, and if no new
+   concerns are brought up, the shepherd merges the PR once the 10 days have
    passed.
 
 #### Accepted RFCs
@@ -220,10 +220,10 @@ for implementing the RFC.
 
 The shepherd is a trusted individual who understands the community well and
 knows the major stakeholders. Typically, this will be a long-time contributor of
-LF. During the RFC process the shepherd acts as a moderator and is responsible
+LF. During the RFC process, the shepherd acts as a moderator and is responsible
 for identifying and notifying the relevant stakeholders. While the shepherd may
 weigh in on the discussion and on a decision as a reviewer, they are not a
-decision maker. Their role is to moderate the decision making process and to
+decision maker. Their role is to moderate the decision-making process and to
 decide if more stakeholders or the entire community should be roped in to the
 process.
 
@@ -233,7 +233,7 @@ process.
 Once an RFC becomes active, anyone may submit an implementation of the feature
 as a pull request to the relevant repo. Being active, however, does not
 guarantee that an implementation of the feature will ultimately be merged; it
-does mean that in principle all the major stakeholders have agreed to the
+does mean that, in principle, all the major stakeholders have agreed to the
 feature and are amenable to merging it.
 
 The nature of software development is that new insights are gained during
@@ -241,16 +241,16 @@ implementation and requirements change frequently. Thus, no design document can
 perfectly reflect the end product. Active RFCs are not a specification and you
 may deviate from the initial design where needed (this is even encouraged!).
 Please document those deviations in the implementation PR. Active RFCs may also
-be modified in a follow up pull-request to incorporate new insights. However, if
-a more significant change of the design is required, a new RFC should be created
+be modified in a follow-up pull-request to incorporate new insights. However, if
+a more significant change to the design is required, a new RFC should be created
 with a note added to the original RFC.
 
 A core idea of the RFC process is to think about the implications of a new
-feature and its design early on and to receive feedback quickly and frequently.
+feature and its design early on, and to receive feedback quickly and frequently.
 This helps to identify potential concerns and major roadblocks before investing
 in a concrete implementation. However, it might be helpful to support arguments
-for or against an RFC by a prototype implementation. For some high-priority
-features it might also be required to work on the implementation alongside the
+for or against an RFC with a prototype implementation. For some high-priority
+features, it might also be required to work on the implementation alongside the
 RFC. However, if you decide to invest in an implementation before the RFC
 becomes active, the existence of this implementation and the work that you put
 in do not present arguments against concerns raised by the RFC reviewers.
@@ -262,7 +262,7 @@ You need to follow this process if you intend to make "substantial" changes to
 Lingua Franca, lingo, the reactor runtimes, or the RFC process itself. What
 constitutes a "substantial" change is evolving based on community norms and
 varies depending on what part of the ecosystem you are proposing to change, but
-may include the following.
+may include the following:
 
   - Any semantic or syntactic change to the language that is not a bugfix.
   - Removing language features.
