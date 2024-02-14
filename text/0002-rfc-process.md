@@ -36,19 +36,11 @@ Text to be placed in the README of this repository:
 The "RFC" (request for comments) process is intended to provide a consistent
 and controlled path for changes to Lingua Franca (such as new features) so that all
 stakeholders can be confident about the direction of the project.
-
 Many changes, including bug fixes and documentation improvements can be
 implemented and reviewed via the normal GitHub pull request workflow. Some
 changes though are "substantial", and we ask that these be put through a bit of
 a design process and produce a consensus among the Lingua Franca community.
 
-The RFCs are not intended as a complete specification. Active RFCs are a form of
-documentation that describe the design of features that are considered feasible
-and relevant by the community. As requirements change and rarely a design
-proposal can reflect the end result precisely, RFCs should be amended or
-replaced as needed during the implementation process. At any time, the list of
-active RFCs presents a snapshot of the communities view on the state of the
-project and its potential next steps.
 
 ## Table of Contents
 [Table of Contents]: #table-of-contents
@@ -64,6 +56,18 @@ project and its potential next steps.
   - [RFC Postponement]
   - [License]
   - [Contributions]
+
+## Why RFCs
+
+TODO
+
+The RFCs are not intended as a complete specification. Active RFCs are a form of
+documentation that describe the design of features that are considered feasible
+and relevant by the community. As requirements change and rarely a design
+proposal can reflect the end result precisely, RFCs should be amended or
+replaced as needed during the implementation process. At any time, the list of
+active RFCs presents a snapshot of the communities view on the state of the
+project and its potential next steps.
 
 
 ## When you need to follow this process
@@ -257,7 +261,11 @@ is "no", then the appropriate response is to close the RFC, not postpone it.)
 ## License
 [License]: #license
 
-TODO
+The contents of this repository are licensed under the 2-Clause BSD License (see [LICENSE](LICENSE)).
+
+### Contributing
+
+Unless explicitly stated otherwise, any contribution intentionally submitted for inclusion in this repository shall be licensed as above, without any additional terms or conditions
 
 ---
 
