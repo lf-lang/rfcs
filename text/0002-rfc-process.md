@@ -118,7 +118,9 @@ work is substantial and worth getting additional opinions on. You can start an
 RFC by forking this repository and copying the
 [`0000-template.md`](0000-template.md) file to `text/0000-my-feature.md`,
 replacing `my-feature` with a descriptive short name for your proposal.
-Fill in the sections of the template to start your proposal.
+Fill in the current date in the top section, but leave the RFC PR and tracking
+issue unchanged for now. Fill in the sections of the template to start your
+proposal.
 
 Don't overthink the proposal or aim for being perfect. The idea of the RFC
 process is to receive feedback quickly and iterate frequently. Indicate any open
@@ -296,7 +298,6 @@ Text to be placed in `0000_template.md`:
 
 ---
 
-- Feature Name: (fill me in with a unique ident, `my_awesome_feature`)
 - Start Date: (fill me in with today's date, YYYY-MM-DD)
 - RFC PR: [lf-lang/rfcs#0000](https://github.com/lf-lang/rfcs/pull/0000)
 - Tracking Issue(s): [lf-lang/lingua-franca#0000](https://github.com/lf-lang/lingua-franca/issues/0000)
@@ -304,41 +305,35 @@ Text to be placed in `0000_template.md`:
 # Abstract
 [abstract]: #abstract
 
-One paragraph explanation of the feature.
+A one paragraph explanation of the feature. This may even be a single sentence.
 
 # Motivation
 [motivation]: #motivation
 
-Why are we doing this? What use cases does it support? What is the expected outcome?
+Describe why your proposal is relevant, which use cases it supports, and what we expect the outcome to be.
 
-# Guide-level explanation
-[guide-level-explanation]: #guide-level-explanation
+# Proposed Implementation
+[proposed-implementation]: #proposed-implementation
 
-Explain the proposal as if it was already included in the language and you were teaching it to another Lingua Franca programmer.
-Ideally, this takes the form of documentation that we can copy to the handbook once the feature is implemented.
+This is the core of your proposal, and its purpose is to help you think through the problem because writing is thinking.
 
-This generally includes:
-- Introduction of new named concepts
-- Explanation in terms of examples
-- Explanation of the impact on the way programmers/engineers use Lingua Franca
-- Sample error messages, deprecation warnings, or migration guidance (if applicable)
-- Describe the differences between teaching this to existing programmers/engineers and new programmers/engineers (if applicable)
-
-For implementation-oriented RFCs (e.g. for compiler or runtime internals), this section should focus on how compiler or runtime contributors should think about the change, and give examples of its concrete impact.
-
-# Reference-level explanation
-[reference-level-explanation]: #reference-level-explanation
-
-This is the technical portion of the RFC. Explain the design in sufficient detail that:
-
-- Its interaction with other features is clear.
-- It is reasonably clear how the feature would be implemented.
-- Corner cases are dissected by example. (Expand on the examples used in the Guide-level explanation.)
+- Clearly name and introduction new concepts.
+- Use diagrams to help illustrate your ideas where applicable.
+- Include LF code examples and use-cases if you propose changes to the language.
+- Also consider to use code snippets and examples if you are proposing an interface or
+  system contract.
+- Describe the interaction with other components and features.
+- Consider to include a guide-level explanation that outlines how you would
+  explain this feature to a user (in case of user-facing changes), or to another
+  contributor in case of internal changes. Ideally, this serves as a draft for
+  later documentation of the feature.
 
 # Drawbacks
 [drawbacks]: #drawbacks
 
-Why should we *not* do this? What are the costs of the proposed change? This section will likely get expanded on during the review process.
+Describe possible reasons for not following up with your proposal and identity
+the associated costs. This section will likely get expanded on during the review
+process.
 
 # Rationale and alternatives
 [rationale-and-alternatives]: #rationale-and-alternatives
@@ -350,18 +345,29 @@ Why should we *not* do this? What are the costs of the proposed change? This sec
 # Unresolved questions
 [unresolved-questions]: #unresolved-questions
 
-- What parts of the design do you expect to resolve through the RFC process before this gets merged?
-- What parts of the design do you expect to resolve through the implementation of this feature before stabilization?
-- What related issues do you consider out of scope for this RFC that could be addressed in the future independently of the solution that comes out of this RFC?
+Gather open questions that should be answered before the RFC gets accepted and
+either list them in the document using markdown quoting or add them to this
+section. If you want to mark open questions inline use the following format,
+which is easy to spot when reading through the document:
 
-May be left blank if there are no obvious unresolved questions at time of submission.
+```
+> **Open Question**: this is an open question.
+```
+
+You may also list further unresolved questions that are beyond the scope of the
+RFC process. This may include implementation specific questions that can be
+resolved as part of the implementation process or questions that can be
+addressed by future RFCs independent of the outcome of this RFC.
+
+This section may be left blank if there are no obvious unresolved questions at
+time of submission.
 
 # Future possibilities
 [future-possibilities]: #future-possibilities
 
 This is a place to collect further ideas that are beyond the scope of the RFC
-topic. This may be left blank initially and can be used to collect ideas that
-pop up during the review process.
+topic. This is an optional section and may be left blank. It can be used to
+collect ideas that pop up during the review process.
 
 ---
 
@@ -381,6 +387,8 @@ RFCs.
 # Drawbacks
 [drawbacks]: #drawbacks
 
+- RFCs could be perceived as a chore rather than an enjoyable collaborative
+  process.
 - RFCs impose a more formal style of designing and discussion new features,
   which potentially could slow down development.
 - RFCs could be interpreted as a strict specification and implemented in a
