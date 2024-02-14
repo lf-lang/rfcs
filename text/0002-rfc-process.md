@@ -44,9 +44,23 @@ implemented and reviewed via the normal GitHub pull request workflow. However,
 some changes are more substantial and we ask to put them through a bit of a
 design process. In particular, changes that impact other contributors or
 stakeholders in the LF community or changes that considerably change the user
-experience.
+experience. See [When you need to follow this process] for more details.
+
+## Table of Contents
+[Table of Contents]: #table-of-contents
+
+  - [Opening](#lf-rfcs)
+  - [Table of Contents]
+  - [Goals and Non-Goals]
+  - [The RFC Process]
+  - [Implementation of active RFCs]
+  - [When you need to follow this process]
+  - [License]
+  - [Contributing]
+
 
 ## Goals and Non-Goals
+[Goals and Non-Goals]: #goals-and-non-goals
 
 ### Goals
 
@@ -77,22 +91,165 @@ experience.
   incurs a considerably larger overhead. Assuming that we establish a
   specification process, RFCs could still play a role in it, e.g., for early
   discussion of additions to the specification.
+- Establishing a waterfall model for software design. While RFCs could be
+  interpreted as a specification, they explicitly are not. On the contrary, RFCs
+  are intended as a tool for iterating on ideas quickly and more frequently,
+  even before there is an implementation.
 - Discussing complete implementations. For this we have PRs.
 
-## Table of Contents
-[Table of Contents]: #table-of-contents
 
-  - [Opening](#lf-rfcs)
-  - [Table of Contents]
-  - [When you need to follow this process]
-  - [Before creating an RFC]
-  - [What the process is]
-  - [The RFC life-cycle]
-  - [Reviewing RFCs]
-  - [Implementing an RFC]
-  - [RFC Postponement]
-  - [License]
-  - [Contributions]
+## The RFC Process
+[The RFC Process]: #the-rfc-process
+
+In brief, we use GitHub pull requests to implement the RFC process. This
+repository contains all accepted (active) RFCs. To propose a new feature, you
+draft a design document following our [template](0000-template.md) and open a
+pull request to ask for comments. The PR will be reviewed by the stakeholders
+and other interested parties. You help to build a consensus and incorporate
+concerns or suggestions in the document. At some point, we will decide to merge
+the PR, in which case the RFC becomes active, or close the PR, in which case the
+RFC is rejected. In either case, the PR discussion captures the rationale and
+explanation of the decision.
+
+#### Drafting an RFC
+
+Creating a new RFC should be something you start as soon as it feels like your
+work is substantial and worth getting additional opinions on. You can start an
+RFC by forking this repository and copying the
+[`0000-template.md`](0000-template.md) file to `text/0000-my-feature.md`,
+replacing `my-feature` with a descriptive short name for your proposal.
+Fill in the sections of the template to start your proposal.
+
+Don't overthink the proposal or aim for being perfect. The idea of the RFC
+process is to receive feedback quickly and iterate frequently. Indicate any open
+questions that you are aware of.
+
+#### Receiving early feedback and collaborative editing
+
+Create a new branch (the branch name should be identical to the short name you
+chose for the proposal file), commit your new proposal and push it to this
+repository or to your own fork. Share the link to your new file with your peers
+to invite others do collaborate on the proposal or ask for early feedback.
+Ideally this involves one of the more senior contributors, who can help to avoid
+larger pitfalls. If you are new to the community and don't know who to reach out
+to, drop a message in our [Zulip](https://lf-lang.zulipchat.com/). The proposal
+does not need to be perfect (timely is more important than perfect), but you
+should clearly identify any gaps that you are aware of.
+
+At this early stage using git and GitHub is merely a suggestion. You may also
+choose other forms of exchanging ideas with your peers and collaborating on a
+text document.
+
+#### Opening a pull request
+
+Once you have build trust in your proposal and are ready to receive feedback
+from a wider audience, it is time to open a pull request on this repository.
+Once you have opened the PR, replace `0000` in the file name of your RFC with
+the PR number and insert a link to the PR at the top of your RFC.
+
+Opening a PR will allow the stakeholders and interested community members to
+review your proposal and to raise concerns or make suggestions. We will also
+assign a [shepherd](#role-of-the-shepherd) to your PR who helps managing the
+remaining process. At this stage, the shepherd should request reviews from
+relevant stakeholders and community members that are affected by or generally
+interested in the RFC.
+
+#### Addressing feedback
+
+Reviewers will share there valuable thoughts and opinions. Aim to address this
+feedback and, if necessary, make changes to the RFC in order to help reach a
+consensus. The shepherd may help to moderate the discussion if needed.
+
+Make changes as new commits to the pull request, and leave a comment on the pull
+request explaining your changes. Specifically, do not squash or rebase commits
+after they are visible on the pull request.
+
+Not every concern raised by a reviewer is an indication of a bad design and
+requires a significant change to the RFC. No solution is perfect and usually
+there are trade-offs involved. Thus addressing a concern can be as simple as
+acknowledging it as a drawback in the RFC document. Again: timeliness and
+frequent iteration are more important than being perfect.
+
+If the RFC is discussed during a meeting, notes and a summary of the meeting
+should be shared as a comment in the PR thread.
+
+#### Final comments and decision
+
+After the discussion settles down, the shepherd decides how to proceed. There
+are three options:
+
+1. If there is an obvious consensus in the discussion and the shepherd is
+   confident that all relevant stakeholders noticed the RFC, the shepherd may
+   decide to merge (accept) or close (reject) the PR directly.
+2. If there is no obvious consensus or there is feedback from major stakeholders
+   missing, the shepherd makes a final call for comments with a disposition to
+   either accept or reject the RFC. This gives the reviewers the possibility to
+   wrap up the discussion. The shepherd may set a deadline until which final
+   comments should be made, but must ensure that this deadline can be met by the
+   stakeholders. If the reviewers agree with the disposition, the PR gets merged
+   in case of accept or closed in case of reject.
+> **Open Question:** What exactly should be required to reach a decision?
+> Majority? Unanimously? Not more than two objections?
+3. For RFCs that require due diligence, as they propose considerable changes to
+   the syntax and semantics of the language or changes to the tooling that
+   largely impact how users interact with the language, the process in 2. gets
+   extended slightly. If the reviewers agree on a disposition to accept, the
+   shepherd announces a final comment period (FCP) on the mailing list and in
+   the Zulip chat. This gives everyone in the community a chance to raise
+   additional concerns. The final comment period lasts 10 days and, if no now
+   concerns are brought, up the shepherd merges the PR once the 10 days have
+   passed.
+
+#### Accepted RFCs
+
+If the RFC is accepted, the shepherd announces the new active RFC on the
+community mailing list and in the [`#rfc` Zulip channel](https://lf-lang.zulipchat.com/#narrow/stream/425418-RFCs).
+
+Furthermore, the shepherd creates an issue (or issues) that tracks the
+implementation of the RFC in the appropriate repository (or repositories) and
+inserts links at the top section of the RFC document. The shepherd may also
+delegate this task to the RFC author or another person that would be responsible
+for implementing the RFC.
+
+#### The role of the shepherd
+[The role of the shepherd]: #role-of-the-shepherd
+
+The shepherd is a trusted individual who understands the community well and
+knows the major stakeholders. Typically, this will be a long-time contributor of
+LF. During the RFC process the shepherd acts as a moderator and is responsible
+for identifying and notifying the relevant stakeholders. While the shepherd may
+weigh in on the discussion and on a decision as a reviewer, they are not a
+decision maker. Their role is to moderate the decision making process and to
+decide if more stakeholders or the entire community should be roped in to the
+process.
+
+## Implementation of active RFCs
+[Implementation of active RFCs]: #implementation-of-actions-rfcs
+
+Once an RFC becomes active, anyone may submit an implementation of the feature
+as a pull request to the relevant repo. Being active, however, does not
+guarantee that an implementation of the feature will ultimately be merged; it
+does mean that in principle all the major stakeholders have agreed to the
+feature and are amenable to merging it.
+
+The nature of software development is that new insights are gained during
+implementation and requirements change frequently. Thus, no design document can
+perfectly reflect the end product. Active RFCs are not a specification and you
+may deviate from the initial design where needed (this is even encouraged!).
+Please document those deviations in the implementation PR. Active RFCs may also
+be modified in a follow up pull-request to incorporate new insights. However, if
+a more significant change of the design is required, a new RFC should be created
+with a note added to the original RFC.
+
+A core idea of the RFC process is to think about the implications of a new
+feature and its design early on and to receive feedback quickly and frequently.
+This helps to identify potential concerns and major roadblocks before investing
+in a concrete implementation. However, it might be helpful to support arguments
+for or against an RFC by a prototype implementation. For some high-priority
+features it might also be required to work on the implementation alongside the
+RFC. However, if you decide to invest in an implementation before the RFC
+becomes active, the existence of this implementation and the work that you put
+in do not present arguments against concerns raised by the RFC reviewers.
 
 ## When you need to follow this process
 [When you need to follow this process]: #when-you-need-to-follow-this-process
@@ -123,171 +280,13 @@ Some changes do not require an RFC:
 If you submit a pull request to implement a new feature without going through
 the RFC process, it may be closed with a polite request to submit an RFC first.
 
-## Before creating an RFC
-[Before creating an RFC]: #before-creating-an-rfc
-
-A hastily-proposed RFC can hurt its chances of acceptance. Low-quality
-proposals, proposals for previously-rejected features, or proposals that don't fit
-into the near-term roadmap may be quickly rejected, which can be demotivating
-for the unprepared contributor. Laying some groundwork ahead of the RFC can
-make the process smoother.
-
-Although there is no single way to prepare for submitting an RFC, it is
-generally a good idea to pursue feedback from other project developers
-beforehand to ascertain that the RFC may be desirable. Having a consistent
-impact on the project requires concerted effort toward consensus-building.
-You may talk the idea over on our [official Zulip server](https://lf-lang.zulipchat.com/)
-or file issues on this repo for discussion.
-
-As a rule of thumb, receiving encouraging feedback from long-standing project
-developers is a good indication that the RFC is worth pursuing.
-
-## What the process is
-[What the process is]: #what-the-process-is
-
-In short, to get a major feature added to Lingua Franca, one must first get the
-RFC merged into the RFC repository as a Markdown file. At that point the RFC is
-"active" and may be implemented with the goal of eventual inclusion into Lingua
-Franca.
-
-  - Fork the RFC repo [RFC repository]
-  - Copy `0000-template.md` to `text/0000-my-feature.md` (where "my-feature" is
-    descriptive). Don't assign an RFC number yet; this is going to be the PR
-    number, and we'll rename the file accordingly if the RFC is accepted.
-  - Fill in the RFC. Put care into the details: RFCs that do not present
-    convincing motivation, demonstrate lack of understanding of the design's
-    impact, or are disingenuous about the drawbacks or alternatives tend to
-    be poorly-received.
-  - Submit a pull request (the PR title should start with "RFC:"). As a pull
-    request the RFC will receive design feedback from the larger community, and
-    the author should be prepared to revise it in response.
-  - Now that your RFC has an open pull request, use the issue number of the PR
-    to update your `0000-` prefix to that number.
-  - Build consensus and integrate feedback. RFCs that have broad support are
-    much more likely to make progress than those that don't receive any
-    comments. Feel free to reach out in particular to get help identifying
-    stakeholders and obstacles.
-  - The team will discuss the RFC pull request, as much as possible in the
-    comment thread of the pull request itself. Offline discussion will be
-    summarized on the pull request comment thread.
-  - RFCs rarely go through this process unchanged, especially as alternatives
-    and drawbacks are shown. You can make edits, big and small, to the RFC to
-    clarify or change the design, but make changes as new commits to the pull
-    request, and leave a comment on the pull request explaining your changes.
-    Specifically, do not squash or rebase commits after they are visible on the
-    pull request.
-  - At some point, a member of the team will propose a "motion for final
-    comment period" (FCP), along with a *disposition* for the RFC (merge, close,
-    or postpone).
-    - This step is taken when enough of the tradeoffs have been discussed and a rough consensus has been reached, so that
-      the core team is in a position to make a decision. That does not require
-      consensus among all participants in the RFC thread (which is usually
-      impossible). However, the argument supporting the disposition on the RFC
-      needs to have already been clearly articulated, and there should not be a
-      strong consensus *against* that position. Team members use their best
-      judgment in taking this step, and the FCP itself ensures there is ample
-      time and notification for stakeholders to push back if it is made
-      prematurely.
-    - For RFCs with lengthy discussion, the motion to FCP is usually preceded by
-      a *summary comment* trying to lay out the current state of the discussion
-      and major tradeoffs/points of disagreement.
-    - The motion for FCP should include a checkbox list that tags major
-      stakeholder and reviewers that need to sign off on the FCP. This is often
-      the point at which many team members first review the RFC in full depth.
-      Once a majority of reviewers approve (and at most 2 approvals are outstanding),
-      the FCP begins.
-  - The FCP lasts ten calendar days, so that it is open for at least 5 business
-    days. It is also advertised widely,
-    e.g. on the LF mailing list. This way all
-    stakeholders have a chance to lodge any final objections before a decision
-    is reached.
-  - In most cases, the FCP period is quiet, and the RFC is either merged or
-    closed. However, sometimes substantial new arguments or ideas are raised,
-    the FCP is canceled, and the RFC goes back into development mode.
-
-## The RFC life-cycle
-[The RFC life-cycle]: #the-rfc-life-cycle
-
-Once an RFC becomes "active," anyone may submit an implementation of the
-feature as a pull request to the relevant repo. Being "active" is not a rubber
-stamp, and in particular it still does not mean the feature will ultimately be
-merged. However, it does mean that in principle, all the major stakeholders have agreed
-to the feature and are amenable to merging it.
-
-Furthermore, the fact that a given RFC has been accepted and is "active"
-implies nothing about what priority is assigned to its implementation, nor does
-it imply anything about whether a developer has been assigned the task of
-implementing the feature. While it is not *necessary* that the author of the
-RFC also write the implementation, it is by far the most effective way to see
-an RFC through to completion: Authors should not expect that other project
-developers will take on responsibility for implementing their accepted feature.
-
-Modifications to "active" RFCs can be done in follow-up pull requests. We
-strive to write each RFC in a manner that it will reflect the final design of
-the feature; but the nature of the process means that we cannot expect every
-merged RFC to actually reflect what the end result will be at the time of the
-next release.
-
-In general, once accepted, RFCs should not be substantially changed. Only very
-minor changes should be submitted as amendments. More substantial changes
-should be new RFCs, with a note added to the original RFC. Exactly what counts
-as a "very minor change" is up to the team to decide.
-
-## Reviewing RFCs
-[Reviewing RFCs]: #reviewing-rfcs
-
-While the RFC pull request is up, the core developers may schedule meetings with
-the author and/or relevant stakeholders to discuss the issues in greater detail,
-and in some cases the topic may be discussed at a regular LF meeting. In either
-case a summary from the meeting will be posted back to the RFC pull request.
-
-Final decisions about RFCs are made after the benefits and drawbacks are well
-understood. These decisions can be made at any time. When a decision is made,
-the RFC pull request will either be merged or closed. In either case, if the
-reasoning is not clear from the discussion in the thread, the a comment
-describing the rationale for the decision will be added.
-
-
-## Implementing an RFC
-[Implementing an RFC]: #implementing-an-rfc
-
-Some accepted RFCs represent vital features that need to be implemented right
-away. Other accepted RFCs can represent features that can wait until some
-arbitrary developer feels like doing the work. Every accepted RFC has an
-associated issue tracking its implementation in the relevant repository.
-
-The author of an RFC is not obligated to implement it. Of course, the RFC
-author (like any other developer) is welcome to post an implementation for
-review after the RFC has been accepted.
-
-If you are interested in working on the implementation for an "active" RFC, but
-cannot determine if someone else is already working on it, feel free to ask
-(e.g. by leaving a comment on the associated issue).
-
-## RFC Postponement
-[RFC Postponement]: #rfc-postponement
-
-Some RFC pull requests are tagged with the "postponed" label when they are
-closed (as part of the rejection process). An RFC closed with "postponed" is
-marked as such because we want neither to think about evaluating the proposal
-nor about implementing the described feature until some time in the future, and
-we believe that we can afford to wait until then to do so.
-Postponed pull requests may be re-opened when the time is right. We don't have
-any formal process for that, you should ask members of the core team.
-
-Usually an RFC pull request marked as "postponed" has already passed an
-informal first round of evaluation, namely the round of "do we think we would
-ever possibly consider making this change, as outlined in the RFC pull request,
-or some semi-obvious variation of it." (When the answer to the latter question
-is "no", then the appropriate response is to close the RFC, not postpone it.)
-
-
 ## License
 [License]: #license
 
 The contents of this repository are licensed under the 2-Clause BSD License (see [LICENSE](LICENSE)).
 
-### Contributing
+## Contributing
+[Contributing]: #contributing
 
 Unless explicitly stated otherwise, any contribution intentionally submitted for inclusion in this repository shall be licensed as above, without any additional terms or conditions
 
