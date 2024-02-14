@@ -33,14 +33,51 @@ Text to be placed in the README of this repository:
 
 [Lingua Franca RFCs]: #lf-rfcs
 
-The "RFC" (request for comments) process is intended to provide a consistent
-and controlled path for changes to Lingua Franca (such as new features) so that all
-stakeholders can be confident about the direction of the project.
-Many changes, including bug fixes and documentation improvements can be
-implemented and reviewed via the normal GitHub pull request workflow. Some
-changes though are "substantial", and we ask that these be put through a bit of
-a design process and produce a consensus among the Lingua Franca community.
+The "RFC" (request for comments) process is a framework for managing both
+historical and planned changes within the LF community. The record of active
+RFCs tells the story of our project, our technology and our thought process.
+We believe in an honest dialog between all contributors and stakeholders within
+the community.
 
+Many changes, including bug fixes and documentation improvements can be
+implemented and reviewed via the normal GitHub pull request workflow. However,
+some changes are more substantial and we ask to put them through a bit of a
+design process. In particular, changes that impact other contributors or
+stakeholders in the LF community or changes that considerably change the user
+experience.
+
+## Goals and Non-Goals
+
+### Goals
+
+- Create a platform for proposing ideas and features, receiving feedback and
+  suggestions for improvement, and quickly iterating towards an improved design.
+  Timely is more important than perfect.
+- Establish a record of the relevant design considerations and decisions. This
+  is an important piece of documentation as it allows us to find and reference
+  past design considerations and is a valuable resource for newcomers in the team.
+- Provide a process for producing a consensus among the contributors and
+  stakeholders directly affected by the proposed change. For substantial changes
+  to the semantics or the textual and graphical syntax of the language, the
+  community as a whole should be involved.
+- Make submitting RFCs enjoyable. Ideally the RFC process should be perceived as
+  a supporting tool that helps submitters to asses the feasibility of an idea
+  early on (before sinking time into an implementation) and by helping to
+  improve the design.
+
+### Non-Goals
+
+- Slowing down development unnecessarily, creating significant overhead, or
+  requiring wide consensus on every decision. The process should be flexible
+  enough to adapt to the concrete scope and impact of a proposal and only
+  require a wide consensus for changes that impact large parts of the community.
+- Specification or even standardization of language features and interfaces. If
+  we decide to create specifications for certain aspects of the language and the
+  infrastructure, this is should be done in another process, as specification
+  incurs a considerably larger overhead. Assuming that we establish a
+  specification process, RFCs could still play a role in it, e.g., for early
+  discussion of additions to the specification.
+- Discussing complete implementations. For this we have PRs.
 
 ## Table of Contents
 [Table of Contents]: #table-of-contents
@@ -56,19 +93,6 @@ a design process and produce a consensus among the Lingua Franca community.
   - [RFC Postponement]
   - [License]
   - [Contributions]
-
-## Why RFCs
-
-TODO
-
-The RFCs are not intended as a complete specification. Active RFCs are a form of
-documentation that describe the design of features that are considered feasible
-and relevant by the community. As requirements change and rarely a design
-proposal can reflect the end result precisely, RFCs should be amended or
-replaced as needed during the implementation process. At any time, the list of
-active RFCs presents a snapshot of the communities view on the state of the
-project and its potential next steps.
-
 
 ## When you need to follow this process
 [When you need to follow this process]: #when-you-need-to-follow-this-process
