@@ -35,11 +35,11 @@ Text to be placed in the README of this repository:
 
 The RFC (request for comments) process is a framework for managing both
 historical and planned changes within the LF community. The record of active
-RFCs tells the story of our project, our technology and our thought process.
-We believe in an honest and open dialog between all contributors and
-stakeholders within the community. The RFC process establishes accountability,
-helps to identify and moderate conflicts of interest within the community, and
-builds confidence in the direction the language and the tooling are evolving in.
+RFCs tells the story of our project, our technology and our thought process. We
+believe in an honest and open dialog between all contributors and stakeholders
+within the community. The RFC process establishes accountability, helps to
+identify and navigate disparate goals, and builds confidence in the direction
+the language and the tooling are evolving in.
 
 Many changes, including bug fixes and documentation improvements, can be
 implemented and reviewed via the normal GitHub pull request workflow. However,
@@ -66,6 +66,8 @@ Follow these steps to open a new RFC:
 8. Wait for reviews, carefully read the comments, and try to incorporate
    feedback in your proposal.
 
+Detailed explanations of the steps can be found [here](#the-rfc-process).
+
 ## Goals and Non-Goals
 [Goals and Non-Goals]: #goals-and-non-goals
 
@@ -77,10 +79,10 @@ Follow these steps to open a new RFC:
 - Establish a record of the relevant design considerations and decisions. This
   is an important piece of documentation, as it allows us to find and reference
   past design considerations and is a valuable resource for new contributors.
-- Provide a process for producing a consensus among the contributors and
-  stakeholders directly affected by the proposed change. For substantial changes
-  to the semantics or the textual and graphical syntax of the language, the
-  community as a whole should be involved.
+- Provide a process that allows all contributors and stakeholders directly
+  affected by the proposed change to comment and participate in the decision
+  process. For substantial changes to the semantics or the textual and graphical
+  syntax of the language, the community as a whole should be involved.
 - Make submitting RFCs enjoyable. Ideally, the RFC process should be perceived as
   a supporting tool that helps submitters to assess the feasibility of an idea
   early on (before sinking time into an implementation) and by helping to
@@ -91,7 +93,7 @@ Follow these steps to open a new RFC:
 - Slowing down development unnecessarily, creating significant overhead, or
   requiring wide consensus on every decision. The process should be flexible
   enough to adapt to the concrete scope and impact of a proposal, and only
-  require a wider consensus for changes that impact large parts of the community.
+  involve the stakeholders directly impacted by the community.
 - Specification or even standardization of language features and interfaces. If
   we decide to create specifications for certain aspects of the language and the
   infrastructure, this should be done in another process, as specification
@@ -112,10 +114,10 @@ In brief, we use GitHub pull requests to implement the RFC process. This
 repository contains all accepted (active) RFCs. To propose a new feature, you
 draft a design document following our [template](0000-template.md) and open a
 pull request to ask for comments. The PR will be reviewed by the stakeholders
-and other interested parties. You help to build a consensus and incorporate
-concerns or suggestions in the document. At some point, we will decide to merge
-the PR, in which case the RFC becomes active, or close the PR, in which case the
-RFC is rejected. In either case, the PR discussion captures the rationale and
+and other interested parties. You help to address concerns and incorporate
+suggestions in the document. At some point, we will decide to merge the PR, in
+which case the RFC becomes active, or close the PR, in which case the RFC is
+rejected. In either case, the PR discussion captures the rationale and
 explanation of the decision.
 
 #### Drafting an RFC
@@ -166,8 +168,8 @@ interested in the RFC.
 #### Addressing feedback
 
 The reviewers will share their valuable thoughts and opinions. Aim to address this
-feedback and, if necessary, make changes to the RFC in order to help reach a
-consensus. The shepherd may help to moderate the discussion if needed.
+feedback and, if necessary, make changes to the RFC in order to help reach an
+agreement. The shepherd may help to moderate the discussion if needed.
 
 Make changes as new commits to the pull request, and leave a comment on the pull
 request explaining your changes. Specifically, do not squash or rebase commits
