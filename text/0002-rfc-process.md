@@ -48,18 +48,23 @@ design process. In particular, changes that impact other contributors or
 stakeholders in the LF community or changes that considerably impact the user
 experience. See [When you need to follow this process] for more details.
 
-## Table of Contents
-[Table of Contents]: #table-of-contents
+## TL;DR
 
-  - [Opening](#lf-rfcs)
-  - [Table of Contents]
-  - [Goals and Non-Goals]
-  - [The RFC Process]
-  - [Implementation of active RFCs]
-  - [When you need to follow this process]
-  - [License]
-  - [Contributing]
-
+Follow these steps to open a new RFC:
+1. Fork or clone this repository.
+2. Copy [`0000-template.md`](0000-template.md) to `text/0000-my-feature.md`,
+   replacing `my-feature` with a descriptive short name for your proposal.
+3. Fill in the current date in the top section, but leave the RFC PR and
+   tracking issue unchanged for now.
+4. Fill in the sections of the template to start your proposal and push your
+   changes to a branch with the same name as your proposal.
+5. Share with your peers, ask for feedback, and update your proposal. Use our
+   [Zulip](https://lf-lang.zulipchat.com/) if you are new to the community.
+6. Open a Pull Request in this repository.
+7. Insert the PR link in the top section of the proposal and replace `0000` in
+   the file name with the PR number.
+8. Wait for reviews, carefully read the comments, and try to incorporate
+   feedback in your proposal.
 
 ## Goals and Non-Goals
 [Goals and Non-Goals]: #goals-and-non-goals
