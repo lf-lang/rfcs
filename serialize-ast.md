@@ -263,11 +263,13 @@ the assumption that this will happen in the Lingua Franca code base.
 
 ## Rationale and Alternatives
 
+### Alternatives relating to the need for serialization
+
 One observation here is that the different ways of interoperating with code that is somehow
 separated from the main code base are not mutually exclusive. It might be pragmatic to, on a
 case-by-case basis, choose from many available strategies.
 
-### Use Kotlin for new code, and use the Kotlin to eventually leave the JVM
+#### Use Kotlin for new code, and use the Kotlin to eventually leave the JVM
 
 Kotlin has compilation targets other than Java bytecode, including native, WebAssembly, and
 JavaScript. This partially addresses observation 4.
@@ -288,7 +290,7 @@ Disadvantages:
   code base does parsing, validation, and a small amount of initial lowering (resolving references
   etc.)
 
-### Use WebAssembly (WASM)
+#### Use WebAssembly (WASM)
 
 WebAssembly can be called from Java and is supported by Extism. However, it is not clear what data
 types can be communicated to WASM modules that are easier to work with than the serialization format
@@ -296,7 +298,7 @@ being proposed. Even if such data types do exist and are used instead of strings
 interoperability, this will create technical lock-in on a relatively immature piece of technology
 (WASM-Java interop).
 
-### Use JNI
+#### Use JNI
 
 It seems likely that interfacing in this way between languages with different memory management is
 error-prone and difficult. Please add detail here if this is considered to be a serious possibility.
@@ -305,12 +307,12 @@ Note that JNI does not on its own solve the problem of interop between languages
 data formats. As with WASM, it is likely that even if JNI is used, its use would be facilitated by
 and compatible with serialization for this reason.
 
-### Just use the JVM
+#### Just use the JVM
 
 There is a range of ways to address the situation described in the Motivation section without
 leaving the JVM.
 
-#### Focus on improving community norms instead of improving technologies used
+##### Focus on improving community norms instead of improving technologies used
 
 By introducing RFCs, it is possible to mitigate the damage that individuals can do by addressing
 their needs without considering how it will break the code for other people.
@@ -318,7 +320,7 @@ their needs without considering how it will break the code for other people.
 It may also be possible to somehow change community norms about how CI is run in order to make it
 less of a burden, but no concrete way to do this is on the table currently.
 
-#### Using the same build system, but different programming tools
+##### Using the same build system, but different programming tools
 
 The idea might be that the conceptual separation between research and industry-quality code is at
 the language boundary between Java and Kotlin, or that using Kotlin in certain places helps to
@@ -329,13 +331,38 @@ it even more complex -- and the benefit of strong Java/Kotlin interoperability i
 because inconvenient interoperability is a way of reifying what would otherwise be merely a
 conceptual boundary.
 
-#### Using a separate build system
+##### Using a separate build system
 
 The idea would be that jars are built separately using a completely separate code base and linked in
 at the JVM level. This is the most similar of all the alternatives to the serialization approach,
 but it does not make it as convenient to build a fully independent and self-contained way of running
 tests of side-effect-and-io-free modules, and it does not open as many possibilities for
 independence from the JVM.
+
+### Alternatives to the Serialization Technique
+
+It is possible to serialize an EMF model as XML. Example code for doing that can be found
+[here](https://stackoverflow.com/questions/29496176/serialisation-of-emf-model-to-xml-file-takes-several-hours).
+
+Advantages:
+
+- The code to do this is already provided, so we do not have to write it.
+
+Disadvantages:
+
+- XML is not very human-readable.
+- The format might not contain the right information. For example, it might include absolute paths,
+  whereas we might decide we prefer for paths to be relative to the project root. If the format is
+  to be serialized as test cases and perhaps even committed, then it is desirable for the
+  information it contains to contain no information that is specific to the system on which this
+  functionality is used, and if it contains too much information, then it will be difficult for
+  humans to find the relevant information.
+
+This approach to serialization and deserialization takes care of the "easy part" for us -- it
+automatically provides some serial representation -- but it does not help with the "hard part,"
+which is designing a serial representation that contains the appropriate information for our use
+case and designing a target in-memory representation to which that serial representation should be
+translated.
 
 ## Unresolved questions
 
