@@ -1,6 +1,6 @@
 - Feature Name: `colored-input-output`
 - Start Date: 2024-02-07
-- RFC PR: [lf-lang/rfcs#0000](https://github.com/lf-lang/rfcs/pull/0000)
+- RFC PR: [lf-lang/rfcs#0003](https://github.com/lf-lang/rfcs/pull/3)
 - Tracking Issue(s): [lf-lang/lingua-franca#0000](https://github.com/lf-lang/lingua-franca/issues/0000)
 
 # Abstract
@@ -31,7 +31,7 @@ When browsing large hierarchical models, which are simplified to have same-side 
 If one wants to follow an edge, you click on it and is highlighted in a bright color.
 This also occurs them clicking the port of an edge.
 
-TODO a picture?
+![](../images/0003_image1.png)
 
 # Reference-level explanation
 [reference-level-explanation]: #reference-level-explanation
