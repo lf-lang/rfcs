@@ -26,7 +26,7 @@ In my opinion the topic above is something to be discussed and I intentionally p
 
 The different colors for ports and a proper highlighting for edges improve the readability for browsing big hierarchical models.
 
-When browsing large hierarchical models, which are simplified to have same-side input/output ports, when additionally improves the readability by adding different port colors.
+When browsing large hierarchical models, which are simplified to have same-side input/output ports, adding different port colors additionally improves the readability.
 
 If one wants to follow an edge, you click on it and is highlighted in a bright color.
 This also occurs them clicking the port of an edge.
