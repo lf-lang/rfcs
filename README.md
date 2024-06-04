@@ -14,9 +14,9 @@ implementing a feature that they would like to see become part of the Lingua
 Franca toolchain. While it is not required to write an RFC before submitting a
 PR, it can be very helpful in validating and refining a proposal. Particularly
 for user-facing features and anything that makes a semantic or syntactic change
-to the language, this is very important. If a PR does not have an accompanying
-RFC, the maintainers may therefore still require one be submitted in order to
-vet the proposal.
+to the language, understanding the design considerations is very important. 
+If a PR does not have an accompanying RFC, the maintainers may therefore still
+require one be submitted in order to vet the proposal.
 
 Many changes, however, including bug fixes and documentation improvements, can
 be implemented and reviewed via the normal GitHub pull request workflow. 
@@ -31,7 +31,8 @@ Examples of changes that would _not_ require an RFC:
   - Trivial changes that can be implemented and discussed in a single PR.
 
 
-> [!TIP] If you unsure whether it advisable for you to write an RFC, feel
+> [!TIP]
+> If you unsure whether it advisable for you to write an RFC, feel
 > welcome to ask the
 > [maintainers](https://github.com/orgs/lf-lang/teams/maintainers) for advice.
 
