@@ -4,41 +4,53 @@
 The RFC (request for comments) process is a framework for managing both
 historical and planned changes within the LF community. The record of active
 RFCs tells the story of our project, our technology and our thought process. We
-believe in an honest and open dialog between all contributors and stakeholders
-within the community. The RFC process establishes accountability, helps to
-identify and navigate disparate goals, and builds confidence in the direction
-the language and the tooling are evolving in.
+value an honest and open dialog between all contributors and stakeholders within
+the community. The RFC process establishes accountability, helps to identify and
+navigate disparate goals, and builds confidence in the direction the language
+and the tooling are evolving in.
 
-Many changes, including bug fixes and documentation improvements, can be
-implemented and reviewed via the normal GitHub pull request workflow. However,
-some changes are more substantial and we ask to put them through a bit of a
-design process. In particular, changes that impact the syntax or the semantics
-of the Lingua Franca language.
+This process is intended to help anyone interested in designing and/or
+implementing a feature that they would like to see become part of the Lingua
+Franca toolchain. While it is not required to write an RFC before submitting a
+PR, it can be very helpful in validating and refining a proposal. Particularly
+for user-facing features and anything that makes a semantic or syntactic change
+to the language, this is very important. If a PR does not have an accompanying
+RFC, the maintainers may therefore still require one be submitted in order to
+vet the proposal.
 
-## TL;DR
+Many changes, however, including bug fixes and documentation improvements, can
+be implemented and reviewed via the normal GitHub pull request workflow. 
 
-Follow these steps to open a new RFC:
-1. Fork or clone this repository.
-2. Copy [`0000-template.md`](0000-template.md) to `rfcs/0000-my-feature.md`,
-   replacing `my-feature` with a descriptive short name for your proposal.
-3. Fill in the current date in the top section, but leave the RFC PR and
-   tracking issue unchanged for now.
-4. Fill in the sections of the template to start your proposal and push your
-   changes to a branch with the same name as your proposal.
-5. Share with your peers, ask for feedback, and update your proposal. Use our
-   [Zulip](https://lf-lang.zulipchat.com/) if you are new to the community.
-6. Open a Pull Request in this repository.
-7. Insert the PR link in the top section of the proposal and replace `0000` in
-   the file name with the PR number.
-8. Wait for reviews, carefully read the comments, and try to incorporate
-   feedback in your proposal.
+Examples of changes that would _not_ require an RFC:
 
-Detailed explanations of the steps can be found [here](#the-rfc-process).
+  - Rephrasing, reorganizing, refactoring, or otherwise "changing shape that does
+    not change meaning".
+  - Additions that strictly improve objective, numerical quality criteria
+    (warning removal, speedup, better platform coverage, more parallelism, etc.)
+  - Additions only likely to be noticed by other developers and invisible to users of Lingua Franca.
+  - Trivial changes that can be implemented and discussed in a single PR.
 
-## Goals and Non-Goals
-[Goals and Non-Goals]: #goals-and-non-goals
 
-### Goals
+> [!TIP] If you unsure whether it advisable for you to write an RFC, feel
+> welcome to ask the
+> [maintainers](https://github.com/orgs/lf-lang/teams/maintainers) for advice.
+
+> [!NOTE]
+> **TL;DR:** Follow these steps to open a new RFC:
+> 1. Fork or clone this repository.
+> 2. Copy [`0000-template.md`](0000-template.md)to `rfcs/0000-my-feature.md`, replacing `my-feature` with a descriptive short name for your proposal.
+> 3. Fill in the current date in the top section, but leave the RFC PR and tracking issue unchanged for now.
+> 4. Fill in the sections of the template to start your proposal and push your changes to a branch with the same name as your proposal.
+> 5. Share with your peers, ask for feedback, and update your proposal. Use our [Zulip](https://lf-lang.zulipchat.com/) if you are new to the community.
+> 6. Open a Pull Request in this repository.
+> 7. Insert the PR link in the top section of the proposal and replace `0000` in the file name with the PR number.
+> 8. Wait for reviews, carefully read the comments, and try to incorporate feedback in your proposal.
+>
+> Detailed explanations of the steps can be found [here](#the-rfc-process).
+
+## Goals
+[Goals]:
+#goals
 
 - Create a platform for proposing ideas and features, receiving feedback, and
   quickly iterating towards an improved design. Timely is more important than
@@ -55,7 +67,9 @@ Detailed explanations of the steps can be found [here](#the-rfc-process).
   early on (before sinking time into an implementation) and by helping to
   improve the design.
 
-### Non-Goals
+## Non-Goals
+[Non-Goals]:
+#non-goals
 
 - Slowing down development unnecessarily, creating significant overhead, or
   requiring wide consensus on every decision. The process should be flexible
@@ -72,7 +86,6 @@ Detailed explanations of the steps can be found [here](#the-rfc-process).
   are intended as a tool for iterating on ideas quickly and more frequently,
   even before there is an implementation.
 - Discussing complete implementations. For this, we have PRs.
-
 
 ## The RFC Process
 [The RFC Process]: #the-rfc-process
@@ -214,27 +227,6 @@ features, it might also be required to work on the implementation alongside the
 RFC. However, if you decide to invest in an implementation before the RFC
 becomes active, the existence of this implementation and the work that you put
 in do not present arguments against concerns raised by the RFC reviewers.
-
-## When you need to follow this process
-[When you need to follow this process]: #when-you-need-to-follow-this-process
-
-You need to follow this process if you intend to make any semantic or syntactic
-change to the language that is not a bugfix. This also includes the removal of
-language features. The maintainers may also decide to require an RFC for other
-"substantial" changes to Lingua Franca, the reactor runtimes, related tools and
-IDEs, or the RFC process itself. What constitutes a "substantial" change is
-evolving based on community norms and varies depending on what part of the
-ecosystem you are proposing to change. Please contact the
-[maintainers](https://github.com/orgs/lf-lang/teams/maintainers) if in doubt.
-
-Some changes do not require an RFC:
-
-  - Rephrasing, reorganizing, refactoring, or otherwise "changing shape that does
-    not change meaning".
-  - Additions that strictly improve objective, numerical quality criteria
-    (warning removal, speedup, better platform coverage, more parallelism, etc.)
-  - Additions only likely to be noticed by other developers and invisible to users of Lingua Franca.
-  - Trivial changes that can be implemented and discussed in a single PR.
 
 ## License
 [License]: #license
