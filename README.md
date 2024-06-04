@@ -40,8 +40,8 @@ Examples of changes that would _not_ require an RFC:
 > **TL;DR:** Follow these steps to open a new RFC:
 > 1. Fork or clone this repository.
 > 2. Copy [`0000-template.md`](0000-template.md)to `rfcs/0000-my-feature.md`, replacing `my-feature` with a descriptive short name for your proposal.
-> 3. Fill in the current date in the top section, but leave the RFC PR and tracking issue unchanged for now.
-> 4. Fill in the sections of the template to start your proposal and push your changes to a branch with the same name as your proposal.
+> 3. Enter the current date in the top section, but leave the RFC PR and tracking issue unchanged for now.
+> 4. Provide content for the sections of the template to start your proposal and push your changes to a branch with the same name as your proposal.
 > 5. Share with your peers, ask for feedback, and update your proposal. Use our [Zulip](https://lf-lang.zulipchat.com/) if you are new to the community.
 > 6. Open a Pull Request in this repository.
 > 7. Insert the PR link in the top section of the proposal and replace `0000` in the file name with the PR number.
@@ -153,11 +153,7 @@ RFC based on the [acceptance
 criteria]()https://github.com/lf-lang/.github/blob/main/CONTRIBUTING.md#acceptance-criteria.
 Aim to address this feedback and, if necessary, make changes to the RFC in order
 to help reach an agreement. The shepherd may help to moderate the discussion if
-needed. The acceptance criteria provide a guideline on
-
-Make changes as new commits to the pull request, and leave a comment on the pull
-request explaining your changes. Specifically, do not squash or rebase commits
-after they are visible on the pull request.
+needed.
 
 Not every concern raised by a reviewer is an indication of a bad design and
 requires a significant change to the RFC. No solution is perfect, and usually,
@@ -182,12 +178,9 @@ will discuss the RFC and reach a decision.
 
 If the RFC is accepted, the shepherd announces the new active RFC on the
 community mailing list and in the [`#rfc` Zulip channel](https://lf-lang.zulipchat.com/#narrow/stream/425418-RFCs).
-
-Furthermore, the shepherd creates an issue (or issues) that tracks the
+It is recommended to also create an issue(s) to track the
 implementation of the RFC in the appropriate repository (or repositories) and
-inserts links at the top section of the RFC document. The shepherd may also
-delegate this task to the RFC author or another person that would be responsible
-for implementing the RFC.
+insert links to the tracking issue(s) at the top section of the RFC document.
 
 #### The role of the shepherd
 [The role of the shepherd]: #role-of-the-shepherd
@@ -208,7 +201,9 @@ Once an RFC becomes active, anyone may submit an implementation of the feature
 as a pull request to the relevant repo. Being active, however, does not
 guarantee that an implementation of the feature will ultimately be merged; it
 does mean that, in principle, all the major stakeholders have agreed to the
-feature and are amenable to merging it.
+feature and would like to see it realized. Approval of the PR also depends on
+other factors like code quality, maintainability, and relevance (see
+[CONTRIBUTING](https://github.com/lf-lang/.github/blob/main/CONTRIBUTING.md)).
 
 The nature of software development is that new insights are gained during
 implementation and requirements change frequently. Thus, no design document can
