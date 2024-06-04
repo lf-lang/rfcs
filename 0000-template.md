@@ -19,10 +19,8 @@ This is the core of your proposal, and its purpose is to help you think through 
 
 - Clearly name and introduction new concepts.
 - Use diagrams to help illustrate your ideas where applicable.
-- Include LF code examples and use-cases if you propose changes to the language.
-- Also consider to use code snippets and examples if you are proposing an interface or
-  system contract.
-- Describe the interaction with other components and features.
+- Include LF code examples and use cases if you propose changes that are user facing.
+- Describe the interaction with existing components and features.
 - Consider to include a guide-level explanation that outlines how you would
   explain this feature to a user (in case of user-facing changes), or to another
   contributor in case of internal changes. Ideally, this serves as a draft for

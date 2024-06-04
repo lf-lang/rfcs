@@ -2,8 +2,8 @@
 [Lingua Franca RFCs]: #lf-rfcs
 
 The RFC (request for comments) process is a framework for managing both
-historical and planned changes within the LF community. The record of active
-RFCs tells the story of our project, our technology and our thought process. We
+historical and planned changes to the Lingua Franca toolchain. The record of active
+RFCs tells the story of our project, our technology, and our thought process. We
 value an honest and open dialog between all contributors and stakeholders within
 the community. The RFC process establishes accountability, helps to identify and
 navigate disparate goals, and builds confidence in the direction the language
@@ -76,7 +76,7 @@ Examples of changes that would _not_ require an RFC:
   enough to adapt to the concrete scope and impact of a proposal, and only
   involve the stakeholders directly impacted by the community.
 - Specification or even standardization of language features and interfaces. If
-  we decide to create specifications for certain aspects of the language and the
+  we decide to create specifications for certain aspects of the language or the
   infrastructure, this should be done in another process, as specification
   incurs a considerably larger overhead. Assuming that we establish a
   specification process, RFCs could still play a role in it, e.g., for early
@@ -140,8 +140,8 @@ the PR number and insert a link to the PR at the top of your RFC.
 
 Opening a PR will allow the stakeholders and interested community members to
 review your proposal and raise concerns or make suggestions. We will also
-assign a [shepherd](#role-of-the-shepherd) to your PR who helps manage the
-remaining process. At this stage, the shepherd should request reviews from
+assign a [shepherd](#role-of-the-shepherd) to your PR to help manage the
+remaining process. A shepherd will request reviews from
 relevant stakeholders and community members that are affected by or generally
 interested in the RFC.
 
@@ -174,7 +174,7 @@ comments (FCP) with a disposition to accept or reject the RFC. The FCP lasts 7
 days and is announced both on the community mailing list and the [`#rfc` Zulip
 channel](https://lf-lang.zulipchat.com/#narrow/stream/425418-RFCs). The
 announcement should include the RFC title and abstract as well as a link to the
-PR. At the next developer meeting after the FCP period ends, the maintainers
+PR. After the FCP period ends, the maintainers
 will discuss the RFC and reach a decision.
 
 #### Accepted RFCs
