@@ -166,12 +166,12 @@ should be shared as a comment in the PR thread.
 
 #### Final comments and decision
 
-After the discussion settles down, the shepherd sends out a final call for
-comments (FCP) with a disposition to accept or reject the RFC. The FCP lasts 7
+After the discussion settles down, the shepherd announces the start of a final comment
+period (FCP) with a disposition to accept or reject the RFC. The FCP lasts 7
 days and is announced both on the community mailing list and the [`#rfc` Zulip
 channel](https://lf-lang.zulipchat.com/#narrow/stream/425418-RFCs). The
 announcement should include the RFC title and abstract as well as a link to the
-PR. After the FCP period ends, the maintainers
+PR. After the FCP ends, the maintainers
 will discuss the RFC and reach a decision.
 
 #### Accepted RFCs
