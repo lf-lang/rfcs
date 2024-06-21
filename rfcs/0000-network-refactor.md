@@ -161,29 +161,118 @@ This is based on TCP, so it will `shutdown()` and `close()` the socket, destroy 
 ## 3. Send (`write_to_netdrv()`) and Receive (`read_from_netdrv()`)
 [Send]: #Send
 
-This part is the largest and important change of the TCP implementation of Lingua Franca.
+This part is the largest and important change of the implementation of Lingua Franca.
+I will talk about how the original code works, and why we it is not able to apply encryption in this structure.
 
+## How the original code works
 The current implementation uses TCP, which is a byte stream, meaning data is transmitted as a continuous stream of bytes without explicit message boundaries.
-So, LF is transferring messages (signals) in 'messages` with message headers, however the implmentation does not to, due to it is a byte stream.
+So, LF is transferring messages (signals) in 'messages' with message headers, however the implmentation does not to, due to it is a byte stream and this is not a problem.
+So sending a single message can be done by calling the `write()` multiple times, and also `read()` can be multiple times for receiving a single message.
+
+### Terms
+Before starting explanation, we need exact terms.
+The `write()` is the POSIX `write()` function, and same with `read()`
+```C
+#include <unistd.h>
+// write() writes up to count bytes from the buffer starting at buf
+ssize_t write(int fd, const void buf[.count], size_t count);
+
+//read() attempts to read up to count bytes into the buffer starting at buf.
+ssize_t read(int fd, void buf[.count], size_t count);
+```
+
+The `write_to_socket()` and `read_from_socket()` are defined in `net_util.c`.
+
+The difference between these operations, is that the POSIX functions 'attempt' and read and write 'up to' the count. 
+These functions return the actual count the read or wrote.
+However, the LF `write_to_socket()` and `read_from_socket()` functions, **repeat the read and write until the actual count reaches the required count**.
+Keep this in mind.
+
+### Continuing...
+The problem starts from by calling the `write_to_socket()` multiple times, and also `read_from_socket()` can be multiple times for receiving a single message.
 
 For example, `MSG_TYPE_FED_IDS` consists of like this:
 
 |`MSG_TYPE_FED_IDS` (1 byte) | `federate_ID` (2 bytes) | `federationID_length` (1 byte) | `federation_ID` (n) |
 
+In this message, the federation_ID is variable. So, it sends the first 4 bytes of the buffer, and then sends the variable lengthed federation ID.
 The original code does this.
-```
-## federate.c
+```C
+# federate.c
 // make buffer = |MSG_TYPE_FED_IDS|federate_ID|federationID_length| 
-write_to_socket(buffer);
-write_to_socket(federation_ID);
+write_to_socket(buffer); // send first 4 bytes.
+write_to_socket(federation_ID); // send the federation_id.
+```
+```C
+# rti_remote.c
+// Read the 4 byte header.
+read_from_socket(buffer, 4);
+// extract length of federation_id
+federation_id_length = buffer + 3;
+char federation_id_received[federation_id_length + 1];
+read_from_socket(federation_id_received, 4);
+```
+So for a sending a single 'message', there can be these four cases.
 
-## rti_remote.c
-// rea
+Case 1: One write(), One read()
 
+Case 2: One write(), Multiple read()
+
+Case 3: Multiple write(), One read()
+
+Case 4: Multiple write(), Multiple read()
+
+Only case 1, 2, and 4 exists in the LF code base. Most messages on initialization step is done with case 1. After connection, most messages are done with case 2, since, it first reads the one byte message header, and then goes through a `switch case` and reads the payload.
+
+### Why Encryption Does not Work
+
+The original implementation looks efficient, minimizing `memcpy()`s. However encryption does not work.
+
+What we want to do, is before sending a message, we want to encrypt it, and when we receive a message, we want to decrypt it.
+AES is a common symmetric encryption scheme which is a block cipher.
+So, the logic would look like this.
+```C
+write_to_socket(buffer, buffer_length) {
+  encrypt(buffer);
+  write(buffer);
+}
+
+read_from_socket(received, buffer_length) {
+  read(received);
+  decrypt(received);
+}
 ```
 
-So, it sends the first 4 bytes of the buffer, and then sends the variable lengthed federation ID. Let's try 
+So, Case 1 looks straightforward. We encrypt a total message and send it, and decrypt a total message and return it.
 
+Let's have a look on Case 2.
+For example, MSG_TYPE_TIMESTAMP is a message which looks like this.
+
+| MSG_TYPE_TIMESTAMP(1 byte) | timestamp (8 bytes) |
+
+When it is sent, it is sent in once. When it is received, it is received twice.
+
+```C
+# federate.c
+// make buffer = | MSG_TYPE_TIMESTAMP(1 byte) | timestamp (8 bytes) |
+write_to_socket(buffer); // send 9 bytes.
+```
+```C
+# rti_remote.c
+// read message header.
+read_from_socket(buffer, 1);
+// read timestamp.
+read_from_socket(buffer + 1, 8);
+```
+The first `write_to_socket()` will encrypt the total message.
+So, there will be a ciphertext of the total message.
+Now, the first `read_from_socket(buffer, 1);` should return the one byte header of the message.
+However, this is not possible in encryption.
+It is not able to partially decrypt this message only returning the message header.
+
+So, to address this problem, **we need to match the number of `write_to_socket()` and `read_from_socket()` calls**.
+
+### TCP
 
 I propose the `write_to_netdrv()` and `read_from_netdrv()` to be message oriented.
 
