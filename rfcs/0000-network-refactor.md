@@ -8,22 +8,37 @@
 This RFC adds network interoperability, which includes network security, and applying other network stacks.
 It provides a network interface layer to the federated execution in `reactor-c`, for easily adding other network stacks.
 
+Note: We do not propose to change the protocol or any message formats. It should be discussed in another RFC.
 # Motivation
 [motivation]: #motivation
+We propose to create a layer of abstraction for the network-related code, making it a network interface which enables the easy addition of other network stacks, including adding end-to-end configurable security.
 
-The original implementation was not 'safe' in two points.
+The current code base is entangled with TCP sockets, making it difficult to add different network stacks.
+adding encryption to the current code is very difficult when we are trying to minimize changing the original code.
+
+For example, when trying to add security, the `reactor-c` code base did not consider network security when it was implemented in the first place, making it very difficult when trying to minimize changing the original code structure.
+We explain further details and rationale in the [Send] section.
+
+Thus, we aim to support different types of underlying network communication protocols and encryption including TCP (same as the current socket), Pub-Sub (e.g., MQTT), and End-to-End Security such as SSL/TLS or [Secure Swarm Toolkit (SST)](https://github.com/iotauth).
+
+### Motivation on applying Security in Federated Execution.
+
+The original implementation of federated execution was not 'secure' in two points.
 1. The current messages sent over the network are all fully plaintext, which does not ensure the confidentiality of the message.
 2. The federates joining the federation are not authenticated. Any malicious federate can join the federation, if they know the `federation_id`.
 
-When trying to add security, the main challenge is that the `reactor-c` code base did not consider network security when it was implemented in the first place. The code base is entangled with TCP sockets, thus making it difficult to add an additional layer of end-to-end security. We explain further details and rationale in the [Send] section.
-
-We propose to create a layer of abstraction for the network-related code, making it a network interface which enables the easy addition of other network stacks.
-
-We aim to support different types of underlying network communication protocols and encryption including TCP (same as the current socket), Pub-Sub (e.g., MQTT), and End-to-End Security such as SSL/TLS or [Secure Swarm Toolkit (SST)](https://github.com/iotauth).
 
 # Proposed Implementation
 [proposed-implementation]: #proposed-implementation
 
+## New features
+The communication type is selected as a target property.
+
+```
+target C {
+  comm-type: TCP // TCP is default when not defined.
+}
+```
 ## Overview
 ### Network Interface
 The proposed API consists of roughly three phases and 6 API functions described below.
@@ -33,7 +48,12 @@ The proposed API consists of roughly three phases and 6 API functions described 
   - We can say a `connector` is requesting a connection to a `listener`. 
     In the most simple case, the `federate` will be the connector, and the `RTI` will be the listener. 
     Also, for decentralized coordination, one federate listening to inbound connections will be the `listener`, and the other federate connecting outbound will be the `connector`.  
+  - The goal is to create a session between the `listener` and the `connector`.
+  -  The `listner` will first create a `netdrv_t`, and call `establish_communication_session()`, which will listen to incoming connection requests.
+    The `connector` will create a `netdrv_t` for connection, and call `connect_to_netdrv()`.
   - This includes `create_connector()`, `create_listener()`, `establish_communication_session()` and `connect_to_netdrv()`.
+
+  Note: `establish_communication_session()` function is described as `wait_for_connection()`.
 
 2. **Close**
 
@@ -46,7 +66,7 @@ The proposed API consists of roughly three phases and 6 API functions described 
   - This includes `write_to_netdrv()` and `read_from_netdrv()`.
 
 
-Details will be explained further below [Details of Implementation].
+Details will be explained further below.
 
 ![](img/APIOverview.jpg)
 
@@ -61,18 +81,20 @@ typedef struct netdrv_t {
 } netdrv_t;
 ```
 The **`void* priv`** is cast to another struct depending on the communication stack used.
-
-The communication type is selected as a target property.
-
+For example,
+```C
+typedef struct socket_priv_t {
+  int socket_descriptor;
+  uint16_t port;
+  uint16_t user_specified_port;
+  ...
+} socket_priv_t;
 ```
-target C {
-  comm-type: TCP // TCP is default when not defined.
-}
-```
+
 
 ## Code Structure
 
-The code is under this directory `core/src/main/resources/lib/c/reactor-c/core/federated/network`
+The network layer code is under this directory `core/src/main/resources/lib/c/reactor-c/core/federated/network`
 ```
 .
 ├── CMakeLists.txt
@@ -84,7 +106,7 @@ The code is under this directory `core/src/main/resources/lib/c/reactor-c/core/f
 └── socket_common.c
 ```
 The compilation does not compile unused files. For example, when using TCP, it does not require `lf_mqtt_support.c` and `lf_sst_support.c`.
-However, due to clock synchronization after initial clock-sync requires UDP, all types require `socket_common.c`. 
+However, due to clock synchronization after initial clock-sync requires UDP, **all types require `socket_common.c`**. 
 
 
 ## Details of Implementation
@@ -158,7 +180,7 @@ This is based on TCP, so it will `shutdown()` and `close()` the socket, destroy 
 [Send]: #Send
 
 This part is the core of this RFC and needs the discussion most.
-I will first describe how the original code works, and why it is very challenging to apply encryption in this structure.
+I will first describe how the original code works, and why it is very challenging to apply encryption in the original structure.
 
 ## How the original code works
 The current implementation uses TCP, which is a byte stream, meaning data is transmitted as a continuous stream of bytes without explicit message boundaries.
@@ -185,13 +207,14 @@ However, the LF `write_to_socket()` and `read_from_socket()` functions, **repeat
 Keep this in mind.
 
 ### Continuing...
-The problem starts by calling the `write_to_socket()` multiple times, and also `read_from_socket()` can be multiple times for receiving a single message.
+The problem starts by calling the `write_to_socket()` multiple times, and also calling `read_from_socket()` multiple times for receiving a single message.
 
 For example, `MSG_TYPE_FED_IDS` consists of like this:
 
 |`MSG_TYPE_FED_IDS` (1 byte) | `federate_ID` (2 bytes) | `federationID_length` (1 byte) | `federation_ID` (n) |
 
-In this message, the federation_ID is variable. So, it sends the first 4 bytes of the buffer, and then sends the variable lengthed federation ID.
+In this message, the federation_ID is variable. 
+So, it sends the first 4 bytes of the buffer, and then sends the variable lengthed federation ID.
 The original code does this.
 ```C
 # federate.c
@@ -218,55 +241,89 @@ Case 3: Multiple write(), One read()
 
 Case 4: Multiple write(), Multiple read()
 
-Only case 1, 2, and 4 exists in the LF code base. Most messages on initialization step is done with case 1. After connection, most messages are done with case 2, since, it first reads the one byte message header, and then goes through a `switch case` and reads the payload.
+Only case 1, 2, and 4 exists in the LF code base. 
+Most messages on initialization step is done with case 1. 
+After connection, most messages are done with case 2, since, it first reads the one byte message header, and then goes through a `switch case` and reads the payload.
 
-### Why Encryption Does not Work
+### Why Encryption Does Not Work
 
-The original implementation looks efficient, minimizing `memcpy()`s. However encryption does not work.
+The original implementation looks efficient, minimizing `memcpy()`s, because it does not make a complete message buffer and send it.
+However encryption does not work on this structure.
 
-What we want to do, is before sending a message, we want to encrypt it, and when we receive a message, we want to decrypt it.
-AES is a common symmetric encryption scheme which is a block cipher.
+<details>
+<summary><b>Short Background on AES Encryption</b></summary>
+
+AES is a commonly used symmetric block cipher, which encrypts data in a fixed-size block (16 bytes).
+So for example, if we want to encrypt bytes from [1,16], the cipher text will always be 16 bytes.
+Decryption also is done in blocks of 16 bytes.
+Partial decryption of a single block is not possible in block ciphers.
+</details>
+
+
+To apply encryption, before sending a message, we want to encrypt and send it, and when we receive a message, we want to receive and decrypt it.
 So, the logic would look like this.
 ```C
-write_to_socket(buffer, buffer_length) {
-  encrypt(buffer);
-  write(buffer);
+write_to_socket(char* buffer, int buffer_length) {
+  encrypt(buffer, buffer_length, encrypted, encrypted_length); // Encrypt the buffer into the 'encrypted' buffer.
+  write(encrypted, encrypted_length);
 }
 
-read_from_socket(received, buffer_length) {
-  read(received);
-  decrypt(received);
+read_from_socket(char* decrypted, int decrypted_length) {
+  received_length = read(received); // Receive the encrypted buffer in 'received' buffer.
+  decrypt(received, received_length, decrypted, decrypted_length); // Decrypt the buffer to the 'decrypted' buffer.
 }
 ```
 
-So, Case 1 looks straightforward. We encrypt a total message and send it, and decrypt a total message and return it.
+So, Case 1 looks straightforward. 
+We encrypt a total message and send it, and decrypt a total message and return the decrypted message.
 
 Let's have a look on Case 2.
-For example, MSG_TYPE_TIMESTAMP is a message which looks like this.
+For example, MSG_TYPE_TIMESTAMP is sent and received as case 2, and the message looks like this.
 
 | MSG_TYPE_TIMESTAMP(1 byte) | timestamp (8 bytes) |
 
-When it is sent, it is sent in once. When it is received, it is received twice.
+When it is sent, it is sent in once. 
+When it is received, it is received twice.
 
 ```C
 # federate.c
 // make buffer = | MSG_TYPE_TIMESTAMP(1 byte) | timestamp (8 bytes) |
-write_to_socket(buffer); // send 9 bytes.
+write_to_socket(buffer, 9); // send 9 bytes.
+-->encrypt(buffer, 9, encrypted, 16); // Returns a encrypted buffer of 16 bytes.
+-->write(encrypted, 16); // Send encrypted buffer.
 ```
 ```C
 # rti_remote.c
-// read message header.
+// Read message header.
 read_from_socket(buffer, 1);
-// read timestamp.
-read_from_socket(buffer + 1, 8);
-```
-The first `write_to_socket()` will encrypt the total message.
-So, there will be a ciphertext of the total message.
-Now, the first `read_from_socket(buffer, 1);` should return the one byte header of the message.
-However, this is not possible in encryption.
-It is not able to partially decrypt this message only returning the message header.
+-->read(encrypted, 16); // Must read total block to decrypt. Partial block decryption is impossible.
+-->decrypt(encrypted, 16, buffer, buffer_length); // Must decrypt the total block, which returns the total buffer length 9.
 
-So, to address this problem, **we need to match the number of `write_to_socket()` and `read_from_socket()` calls**.
+// Read timestamp.
+read_from_socket(buffer + 1, 8);
+   //Everyting is already decrypted. What do we do here?
+-->read(encrypted, encrypted_length);
+-->decrypt(encrypted, encrypted_length, buffer, buffer_length); 
+```
+
+The first `write_to_socket()` will encrypt the complete message of 9 bytes.
+So, there will be a 16 byte ciphertext of the message.
+Now, the first `read_from_socket(buffer, 1);` should return the one byte header of the message.
+As the ground rules, of `read_from_socket()` we need to first `read()` the TCP stream, and then `decrypt()` the message. 
+However, partial block decryption is not available in AES due to the nature of block ciphers, so it must needs to read the total block to decrypt.
+This decryption returns the complete message, not only the message type.
+So, on the second `read_from_socket()` call, there is no message to `read()`, which will block the code.
+
+There are solutions for keeping the original code, it will be discussed on the [Alternative1] section, however it is very complex, and efficient.
+
+So this can be fixed if we can match the number of `write_to_socket()` and `read_from_socket()` calls.
+**I propose the `write_to_netdrv()` and `read_from_netdrv()` to be message oriented, sending a complete message each time.**
+
+### `write_to_netdrv()` and `read_from_netdrv()` in Complete Messages
+
+
+
+
 
 ### TCP
 
@@ -320,13 +377,14 @@ The `memcpy()` is inevitable, due to the design of `write_to_netdrv()`, which re
 
 However, this creates a high overhead when sending `MSG_TYPE_TAGGED_MESSAGE` with very large data. (Note that the maximum size of the TAGGED_MESSAGE is approx. 4GB, due to the length is maximum 4 bytes of unsigned int.)
 
-### 2. `MSG_TYPE_NEIGHBOR_STRUCTURE` overhead ###
+### 2. `MSG_TYPE_NEIGHBOR_STRUCTURE` overhead (minor) 
 When using TCP, `MSG_TYPE_NEIGHBOR_STRUCTURE` introduces small overhead of reading the number of upstream and downstreams. For most messages, excluding `MSG_TYPE_FED_IDS`, `MSG_TYPE_NEIGHBOR_STRUCTURE` and `MSG_TYPE_TAGGED_MESSAGE` (also with `P2P` versions), the message size is determined, and we can know the exact bytes to read. However, the types above have dynamic message sizes, so it cannot be handled by one single `read()`.
 
 The two types, `MSG_TYPE_FED_IDS` and `MSG_TYPE_TAGGED_MESSAGE` has a byte that indicates the length of the dynamic part of the message. However, the `MSG_TYPE_NEIGHBOR_STRUCTURE` does not have this 'length indicator' byte, and it must be extracted by the bytes indicating the number of upstreams, and number of downstreams.
 
 However, this is a very trivial overhead that happens only on the initialization phase, and can be easily fixed by adding a byte indicating the length of the rest of the message such as the other two message types.
 
+//TODO: 
 ### 3. MQTT Overheads ###
 The latency when using MQTT is very poor. I evaluated the average `lag`, defined as `physical_time - logical_time`, in distributed environments using two RPI4s and one workstation, connected within the same Wi-Fi network. I sent a `TAGGED_MESSAGE` and the average lag for TCP and SST was around 14~15 ms, however, MQTT showed 188 milliseconds. This is due to some reasons.
 
@@ -345,6 +403,25 @@ Substantial code has been changed on the RTI code, federate code, and TCP-relate
 - Which alternative designs where considered?
 - Is there prior art and what can we learn from it?
 - Why is the proposed design the best design?
+
+
+
+
+//TODO: 확장성. maintainability. 
+네트워크 layer와 LF 에서의 application layer를 분리해낸다.
+
+지금 구조 그대로 해보려고도 했다. 
+
+
+## Alternatives
+### Challenge 1: Single `write()` and Multiple `read()`
+[Alternative1]: #alternative1
+Possible Solution1: We can use stream ciphers (AES-CTR) instead of block ciphers (AES-CBC, AES-GCM). 
+This is straightforward, however, AES-CTR is not the standard due to it's security vulnerabilities such as replay attacks.
+
+Possible Solution2: We can make some logic to check if there is any already decrypted bytes.
+But then, we need somewhere to save the decrypted bytes, since the decrypted buffer will be in stack memory, and point that when we need it again.
+But this already requires more memory, and the code gets very complex.
 
 # Unresolved questions
 [unresolved-questions]: #unresolved-questions
