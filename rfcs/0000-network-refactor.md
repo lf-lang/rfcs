@@ -8,7 +8,8 @@
 This RFC adds network interoperability, which includes network security, and applying other network stacks.
 It provides a network interface layer to the federated execution in `reactor-c`, for easily adding other network stacks.
 
-Note: We do not propose to change the protocol or any message formats. It should be discussed in another RFC.
+Note: We do not propose to change the protocol or any message formats. 
+It should be discussed in another RFC.
 # Motivation
 [motivation]: #motivation
 We propose to create a layer of abstraction for the network-related code, making it a network interface which enables the easy addition of other network stacks, including adding end-to-end configurable security.
@@ -17,7 +18,7 @@ The current code base is entangled with TCP sockets, making it difficult to add 
 adding encryption to the current code is very difficult when we are trying to minimize changing the original code.
 
 For example, when trying to add security, the `reactor-c` code base did not consider network security when it was implemented in the first place, making it very difficult when trying to minimize changing the original code structure.
-We explain further details and rationale in the [Send] section.
+We explain further details and rationale in the [Send](#Send) section.
 
 Thus, we aim to support different types of underlying network communication protocols and encryption including TCP (same as the current socket), Pub-Sub (e.g., MQTT), and End-to-End Security such as SSL/TLS or [Secure Swarm Toolkit (SST)](https://github.com/iotauth).
 
@@ -26,7 +27,6 @@ Thus, we aim to support different types of underlying network communication prot
 The original implementation of federated execution was not 'secure' in two points.
 1. The current messages sent over the network are all fully plaintext, which does not ensure the confidentiality of the message.
 2. The federates joining the federation are not authenticated. Any malicious federate can join the federation, if they know the `federation_id`.
-
 
 # Proposed Implementation
 [proposed-implementation]: #proposed-implementation
@@ -68,7 +68,7 @@ The proposed API consists of roughly three phases and 6 API functions described 
 
 Details will be explained further below.
 
-![](img/APIOverview.jpg)
+<img src="img/APIOverview.jpg" alt="drawing" width="600"/>
 
 ### `netdrv_t`
 
@@ -117,7 +117,7 @@ This part is where the `connector` actually connects to the `listener`.
 ### TCP
 For TCP, it would look like this.
 
-![](img/TCP_establish.jpg)
+<img src="img/TCP_establish.jpg" alt="drawing" width="500"/>
 
 - `create_listener()` : Creates server socket, binds and listens.
 - `wait_for_connection()` : Calls accept(), and blocks.
@@ -129,7 +129,7 @@ For MQTT, we use the [Paho MQTT API](https://github.com/eclipse/paho.mqtt.c), fo
 
 When establishing communication for MQTT, it would require a protocol to join.
 
-![](img/MQTT_establish.jpg)
+<img src="img/MQTT_establish.jpg" alt="drawing" width="500"/>
 
 The point is to make a single channel for each connection, to ensure messages are not mixed up.
 
@@ -149,7 +149,7 @@ The users do not have to get bothered by key management and cryptography.
 
 SST is based on TCP, so it shares some parts of the code with the TCP implementation.
 
-![](img/SST_establish.jpg)
+<img src="img/SST_establish.jpg" alt="drawing" width="500"/>
 
 The network interface implementation uses the SST-C-API and includes key distribution and authentication of the federates.
 
@@ -168,7 +168,8 @@ Unlike TCP, MQTT does not have this feature. So when `close_netdrv()` is called,
 
 After this, it should disconnect with the broker, and free all memory related to MQTT, and the `netdrv`.
 
-![](img/MQTT_close.jpg)
+<img src="img/MQTT_close.jpg" alt="drawing" width="300"/>
+
 
 ### SST
 
@@ -177,12 +178,12 @@ This is based on TCP, so it will `shutdown()` and `close()` the socket, destroy 
 <img src="img/SST_close.jpg" alt="drawing" width="400"/>
 
 ## 3. Send (`write_to_netdrv()`) and Receive (`read_from_netdrv()`)
-[Send]: #Send
+ <a id="Send"></a>
 
 This part is the core of this RFC and needs the discussion most.
 I will first describe how the original code works, and why it is very challenging to apply encryption in the original structure.
 
-## How the original code works
+### How the original code works
 The current implementation uses TCP, which is a byte stream, meaning data is transmitted as a continuous stream of bytes without explicit message boundaries.
 So, LF is transferring messages (signals) in 'messages' with message headers, however, the implementation does not, due to it being a byte stream and this is not a problem.
 So sending a single message can be done by calling the `write()` multiple times, and also `read()` can be multiple times for receiving a single message.
@@ -314,48 +315,66 @@ However, partial block decryption is not available in AES due to the nature of b
 This decryption returns the complete message, not only the message type.
 So, on the second `read_from_socket()` call, there is no message to `read()`, which will block the code.
 
-There are solutions for keeping the original code, it will be discussed on the [Alternative1] section, however it is very complex, and efficient.
+There are solutions for keeping the original code, it will be discussed on the [Alternative1](#alternatives) section, however it is very complex, and inefficient.
 
 So this can be fixed if we can match the number of `write_to_socket()` and `read_from_socket()` calls.
 **I propose the `write_to_netdrv()` and `read_from_netdrv()` to be message oriented, sending a complete message each time.**
 
-### `write_to_netdrv()` and `read_from_netdrv()` in Complete Messages
+### Why Other Application Layer Network Protocols Does Not Work
+This is similar as the reason why encryption does not work.
+Application layer network protocol's task is to send the requested data, and receive it itself.
+It does not look into the payload itself.
+
+<details>
+<summary><b>For more details.</b></summary>
+
+Let's use the same example, `MSG_TYPE_TIMESTAMP`, and send it via some protocol.
+
+```C
+# federate.c
+// make buffer = | MSG_TYPE_TIMESTAMP(1 byte) | timestamp (8 bytes) |
+write_to_socket(buffer, 9); // send 9 bytes.
+-->wrap_up_data(buffer, 9, wrapped, wrapped_length); // Returns a wrapped buffer.
+-->send_via_protocol(wrapped, wrapped_length); // Send wrapped buffer.
+```
+```C
+# rti_remote.c
+// Read message header.
+read_from_socket(buffer, 1);
+-->receive_via_protocol(wrapped); // Read the total wrapped up message.
+-->decapsulate_data(wrapped, buffer, buffer_length); // Must decrypt the total block, which returns the total buffer length 9.
+
+// Read timestamp.
+read_from_socket(buffer + 1, 8);
+   //Everyting is already received. What do we do here?
+-->receive_via_protocol(wrapped);
+-->decapsulate_data(wrapped, buffer, buffer_length); 
+```
+</details>
 
 
 
+### Sending and Receiving Complete Messages
+
+Changing the `write_to_netdrv()` and `read_from_netdrv()` call to send and receive complete messages enables encryption, and is scalable for other network stacks.
+The input variable is same as before, however the `buffer` will require the complete message when sending, and will return the complete message when receiving.
+
+```C
+int write_to_netdrv(netdrv_t* drv, unsigned char* buffer, size_t buffer_length);
+ssize_t read_from_netdrv(netdrv_t* drv, unsigned char* buffer, size_t buffer_length);
+```
 
 
-### TCP
+However, there are some engineering problems, and drawbacks to address.
 
-I propose the `write_to_netdrv()` and `read_from_netdrv()` to be message oriented.
+#### write_to_netdrv()
+<a id="memcpy-drawbacks"></a>
+The design of the `write_to_netdrv()` requires the total message to be sent in one call. 
+As a result, there must be a `memcpy()` which makes the data to a single buffer.
+However, most message types are already doing `memcpy()`, however the data is small from 1~8 bytes.
+Only additional `memcpy()`s are required on six message types: `MSG_TYPE_FED_IDS`(+P2P version), `MSG_TYPE_NEIGHBOR_STRUCTURE`, `MSG_TYPE_TAGGED_MESSAGE`(+P2P version) , `MSG_TYPE_P2P_MESSAGE`.
 
-
-
-<img src="img/TCP_read_write.jpg" alt="drawing" width="400"/>
-
-### MQTT
-
-Sending a message from a federate to the RTI, actually involves a broker. The message will be sent from the federate to the broker, then the broker will send it to the RTI. To ensure message order QOS 2 is required.
-
-![](img/MQTT_read_write.jpg)
-
-### SST
-
-The SST's `write` will encrypt the total message with the key, and ensure message integrity using HMAC. Then it will send the concatenated ciphertext and HMAC.
-
-The SST's `read` will first check the received message integrity, and then decrypt the message and return the plaintext.
-
-![](img/SST_read_write.jpg)
-
-# Drawbacks
-[drawbacks]: #drawbacks
-
-Drawbacks on TCP should be mostly considered, which will be mostly used.
-
-### 1. `memcpy()` overhead ###
-The design of the `write_to_netdrv()` requires the total message to be sent in one call. As a result, there must be a `memcpy()` which make the data to a single buffer.
-
-For example, `MSG_TYPE_FED_IDS` consists of like this:
+For better understanding, the same example used as above, `MSG_TYPE_FED_IDS` consists of like this:
 
 |`MSG_TYPE_FED_IDS` (1 byte) | `federate_ID` (2 bytes) | `federationID_length` (1 byte) | `federation_ID` (n) |
 
@@ -373,19 +392,150 @@ memcpy(buffer + 4, federation_ID, length);
 write_to_netdrv(buffer);
 ```
 
-The `memcpy()` is inevitable, due to the design of `write_to_netdrv()`, which requires the total message.
+The `memcpy()` is inevitable, due to the design of `write_to_netdrv()`, which requires the complete message.
+The overhead is trivial in most cases.
+For `MSG_TYPE_FED_IDS`, the length of the federation_id is bound to 255 bytes.
+For `MSG_TYPE_NEIGHBOR_STRUCTURE` the number of federates are small in most cases.
+However, it does matter when `MSG_TYPE_TAGGED_MESSAGE` is sending very large data. 
+The total tagged_message data has to be copied to the buffer to send.
+(Note that the maximum size of the TAGGED_MESSAGE is approx. 4GB, due to the length is maximum 4 bytes of unsigned int.)
 
-However, this creates a high overhead when sending `MSG_TYPE_TAGGED_MESSAGE` with very large data. (Note that the maximum size of the TAGGED_MESSAGE is approx. 4GB, due to the length is maximum 4 bytes of unsigned int.)
+
+#### read_from_netdrv()
+
+The `read_from_netdrv()` returns the complete LF message.
+The internal logic will call `read()` multiple times, until it receives the entire buffer.
+This is possible, because the message length is defined as the message type itself, for example, `MSG_TYPE_TIMESTAMP` has always a 1 byte header, and 8 byte timestamp.
+So, in most cases with fixed length messages, `read()` will be called twice.
+
+
+For variable length messages, including `MSG_TYPE_FED_IDS` and `MSG_TYPE_NEIGHBOR_STRUCTURE`, the `read_from_netdrv()` will first, `read()` the message type, then `read()` the required payload length, and then `read()` the varaible payload.
+
+The most challenging part is `MSG_TYPE_TAGGED_MESSAGE` which can send large size messages.
+In centralized coordination, the RTI does not save the completely received buffer, but sends the received fragment to the target federate immediately.
+However, the `read_from_netdrv()` is designed to receive the complete message.
+To address this problem, the `netdrv_t` has a member `int read_remaining_bytes` which indicates that there are more bytes to read.
+So, when the `read_from_netdrv()` is first called, it will check the `read_remaining_bytes`, and if it exists, it does not do the message type check and `read()`s as much as it can.
+
+However, there is some complexity in this code, and this happens because the code was only considering TCP.
+It can be addressed, by maybe changing the protocol and sending scheme when large files are sent.
+This should be discussed in another RFC.
+
+The whole process is described in this simplified state machine.
+
+<img src="img/TCP_read_state_machine.jpg" alt="drawing" width="600"/>
+
+The initial state first checks the remainingBytes. 
+-  If there are no remainingBytes, it reads the first bytes, and enters 'Analyze Header' state.
+    - Depending on the 'msgType', if the msgType requires FIXED bytes, it enters 'Read Message' state, and reads the payload and exits.
+    - If the 'msgType' requires VARIABLE bytes, it reads the header, and sets the 'bytesToRead' to VAR_LENGTH.
+      Then, it finally reads the 'bytesToRead' and exits.
+    - Structured length is also similar, indicating the `MSG_TYPE_NEIGHBOR_STRUCTURE`.
+- If there are 'remainingBytes', it does not read the first byte. Instead enters the Keep Reading state. This is only used for `MSG_TYPE_TAGGED_MESSAGE`.
+    - It is not described in the state machine, but it reads as many bytes as it can, up to the provided buffer's length.
+    - It updates the 'remainingBytes' and exits.
+    - This is needed when TAGGED MESSAGEs are very long. 
+      The RTI does not save the entire message, but just relays it to the other federate.
+    
+
+
+
+### TCP
+
+The total change of TCP is proposed above.
+
+### MQTT
+
+MQTT does not require a complicated state machine.
+MQTT is an application layer protocol, which includes the payload length inside its own header.
+So, if the sender sends a complete message, the receiver will receive the entire message.
+
+Sending a message from a federate to the RTI, actually involves a broker. The message will be sent from the federate to the broker, then the broker will send it to the RTI. To ensure message order QOS 2 is required.
+
+However, MQTT does not support sending large files currently, and the protocol is not intended to send large files.
+Also, brokers have a defined message size limit, which does not support very large sizes.
+I am not planning to support large sized tagged_messages.
+
+<img src="img/MQTT_read_write.jpg" alt="drawing" width="300"/>
+
+### SST
+
+SST also does not require the state machine also, because it has its own protocol including the payload length.
+The SST's `write` will encrypt the total message with the key, and ensure message integrity using HMAC. Then it will send the concatenated ciphertext and HMAC.
+
+The SST's `read` will first check the received message integrity, and then decrypt the message and return the plaintext.
+
+Different keys are used for different communication sessions.
+For example, when `federate_1` sends a message to `federate_2` via the `RTI`, each sessions use different keys. 
+The session between `RTI` and `federate_1` will use `key1`, and between `RTI` and `federate_2` will use `key2`.
+So, when `federate_1` is sending a tagged message via the `RTI` to `federate_2`, `federate_1` encrypts the message and sends it to the `RTI`, the `RTI` decrypts the message using `key1`, and encrypts the message using `key2`, and sends it to `federate_2`.
+
+<img src="img/SST_read_write.jpg" alt="drawing" width="600"/>
+
+# Drawbacks
+[drawbacks]: #drawbacks
+
+Drawbacks on TCP should be mostly considered, which will be mostly used.
+
+### 1. `memcpy()` overhead ###
+
+Details in [above](#memcpy-drawbacks).
+
 
 ### 2. `MSG_TYPE_NEIGHBOR_STRUCTURE` overhead (minor) 
-When using TCP, `MSG_TYPE_NEIGHBOR_STRUCTURE` introduces small overhead of reading the number of upstream and downstreams. For most messages, excluding `MSG_TYPE_FED_IDS`, `MSG_TYPE_NEIGHBOR_STRUCTURE` and `MSG_TYPE_TAGGED_MESSAGE` (also with `P2P` versions), the message size is determined, and we can know the exact bytes to read. However, the types above have dynamic message sizes, so it cannot be handled by one single `read()`.
+When using TCP, `MSG_TYPE_NEIGHBOR_STRUCTURE` introduces small overhead of reading the number of upstream and downstreams. 
+For most messages, excluding `MSG_TYPE_FED_IDS`, `MSG_TYPE_NEIGHBOR_STRUCTURE` and `MSG_TYPE_TAGGED_MESSAGE` (also with `P2P` versions), the message size is determined, and we can know the exact bytes to read. 
+However, the types above have dynamic message sizes, so it cannot be handled by one single `read()`.
 
-The two types, `MSG_TYPE_FED_IDS` and `MSG_TYPE_TAGGED_MESSAGE` has a byte that indicates the length of the dynamic part of the message. However, the `MSG_TYPE_NEIGHBOR_STRUCTURE` does not have this 'length indicator' byte, and it must be extracted by the bytes indicating the number of upstreams, and number of downstreams.
+The two types, `MSG_TYPE_FED_IDS` and `MSG_TYPE_TAGGED_MESSAGE` has a byte that indicates the length of the dynamic part of the message. 
+However, the `MSG_TYPE_NEIGHBOR_STRUCTURE` does not have this 'length indicator' byte, and it must be extracted by the bytes indicating the number of upstreams, and number of downstreams.
+
+So, this extraction will first be on the `read_from_netdrv()` stage, and will happen again, when it is actually trying to use the data.
+This happens because there is no way to pass this data out the `read_from_netdrv()` function.
 
 However, this is a very trivial overhead that happens only on the initialization phase, and can be easily fixed by adding a byte indicating the length of the rest of the message such as the other two message types.
 
-//TODO: 
-### 3. MQTT Overheads ###
+# Rationale and alternatives
+
+
+The main purpose of the RFC is to abstract the underlying layer, separating from the Lingua Franca application layer protocol.
+I expect more scalability and maintainability in the code.
+
+## Alternatives
+### Alternative 1: Keeping the Code: Using Single `write_to_netdrv()` and Multiple `read_from_netdrv()`?
+<a id="alternative1"></a>
+
+Possible Solution1: We can use stream ciphers (AES-CTR) instead of block ciphers (AES-CBC, AES-GCM). 
+This is straightforward, however, AES-CTR is not the standard due to it's security vulnerabilities such as replay attacks.
+
+Possible Solution2: We can make some logic to check if there is any already decrypted bytes.
+But then, we need somewhere to save the decrypted bytes, since the decrypted buffer will be in stack memory, and point that when we need it again.
+But this already requires more memory, and the code gets very complex.
+
+### Alternative 2: Using Multiple `write_to_netdrv()` and Multiple `read_from_netdrv()`?
+<a id="alternative2"></a>
+
+Possible Solution: What about just matching the number of `write_to_netdrv()` and `read_from_netdrv()`?
+This removes the drawback of memcpy(), especially effectively when sending large files.
+However, the code complexity increases, requiring logic to handle segmentation and reassembly of messages, in LF level.
+Also, this leads to more opportunities for error handling due to the segmentation and reassembly process.
+
+Efficiency problems also happen when using other protocols, and applying security.
+More computation is required when sending a single message.
+For example, when we split a message and send it, encryption has to be done twice, for each splitted part.
+
+# Unresolved questions
+[unresolved-questions]: #unresolved-questions
+
+```
+> **Clock Synchronization**: Is it right for runtime clock-sync after initial clock-sync to be always done in UDP?
+> **CI Testing**: How should we test the target property comm-type?
+> **MQTT latency**: How should we handle the latency on MQTT?
+> **Use case of MQTT**: Are there any practical use cases for MQTT?
+```
+
+## Further Concerns
+### MQTT Overheads ###
 The latency when using MQTT is very poor. I evaluated the average `lag`, defined as `physical_time - logical_time`, in distributed environments using two RPI4s and one workstation, connected within the same Wi-Fi network. I sent a `TAGGED_MESSAGE` and the average lag for TCP and SST was around 14~15 ms, however, MQTT showed 188 milliseconds. This is due to some reasons.
 
 1. QOS 2 : This is for ensuring the message is sent in order, which is critical for LF. However, this brings a large overhead. When sending a single message from a federate to the RTI, **16 TCP** messages are sent behind the scenes. (Note: 4 messages between federate and broker, 4 messages between broker and RTI. Another 8 for the RTI and other federate.)
@@ -394,44 +544,9 @@ The latency when using MQTT is very poor. I evaluated the average `lag`, defined
 
 The problem is that this latency makes STP violation, which does not allow passing most tests.
 
-### 4. Code Quality
-Substantial code has been changed on the RTI code, federate code, and TCP-related code, and also massive code has been added due to MQTT, and SST.
-
-# Rationale and alternatives
-[rationale-and-alternatives]: #rationale-and-alternatives
-
-- Which alternative designs where considered?
-- Is there prior art and what can we learn from it?
-- Why is the proposed design the best design?
-
-
-
-
-//TODO: 확장성. maintainability. 
-네트워크 layer와 LF 에서의 application layer를 분리해낸다.
-
-지금 구조 그대로 해보려고도 했다. 
-
-
-## Alternatives
-### Challenge 1: Single `write()` and Multiple `read()`
-[Alternative1]: #alternative1
-Possible Solution1: We can use stream ciphers (AES-CTR) instead of block ciphers (AES-CBC, AES-GCM). 
-This is straightforward, however, AES-CTR is not the standard due to it's security vulnerabilities such as replay attacks.
-
-Possible Solution2: We can make some logic to check if there is any already decrypted bytes.
-But then, we need somewhere to save the decrypted bytes, since the decrypted buffer will be in stack memory, and point that when we need it again.
-But this already requires more memory, and the code gets very complex.
-
-# Unresolved questions
-[unresolved-questions]: #unresolved-questions
-
-```
-> **Clock Synchronization**: Is it right for runtime clock-sync after initail clock-sync to be always done in UDP?
-> **CI Testing**: How should we test the target property comm-type?
-> **MQTT latency**: How should we handle the latency on MQTT?
-> **Use case of MQTT**: Are there any practical use cases for MQTT?
-```
+### Code Quality
+Substantial code has been changed on the RTI code, federate code, and TCP-related code, and also code has been added due to MQTT, and SST.
+It is hard to test if I handled all corner cases that has been figured out before.
 
 # Future possibilities
 [future-possibilities]: #future-possibilities
