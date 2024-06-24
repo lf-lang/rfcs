@@ -8,8 +8,11 @@
 This RFC adds network interoperability, which includes network security, and applying other network stacks.
 It provides a network interface layer to the federated execution in `reactor-c`, for easily adding other network stacks.
 
-Note: We do not propose to change the protocol or any message formats. 
+NOTE: We do not propose to change the Lingua Franca protocol or any message formats. 
 It should be discussed in another RFC.
+
+Work-in-progress PRs (not ready for review yet): https://github.com/lf-lang/lingua-franca/pull/2256 https://github.com/lf-lang/reactor-c/pull/330
+
 # Motivation
 [motivation]: #motivation
 We propose to create a layer of abstraction for the network-related code, making it a network interface which enables the easy addition of other network stacks, including adding end-to-end configurable security.
