@@ -44,7 +44,7 @@ target C {
 ```
 ## Overview
 ### Network Interface
-The proposed API consists of roughly three phases and 6 API functions described below.
+The proposed API consists of roughly three phases and 7 API functions described below.
 
 1.  **Establishing a Communication Session.** 
 
