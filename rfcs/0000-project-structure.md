@@ -1,5 +1,5 @@
 - Start Date: 2024-06-21
-- RFC PR: [lf-lang/rfcs#0000](https://github.com/lf-lang/rfcs/pull/0000)
+- RFC PR: [lf-lang/rfcs#11](https://github.com/lf-lang/rfcs/pull/11)
 - Tracking Issue(s): [lf-lang/lingua-franca#0000](https://github.com/lf-lang/lingua-franca/issues/0000)
 
 # Abstract
