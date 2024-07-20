@@ -5,7 +5,7 @@
 # Abstract
 [abstract]: #abstract
 
-Propose a clear and unambiguous project structure to enhance the deployment of LF projects and ensure support for LF side projects, including the [Lingo Package Manager](https://github.com/lf-lang/lingo) and [VS Code Extension](https://github.com/lf-lang/vscode-lingua-franca).
+This proposal suggests implementing a standardized project structure for LF programs, featuring a centralized directory for reusable reactors, to enhance development, improve maintainability, and foster collaboration through tools like [Lingo Package Manager](https://github.com/lf-lang/lingo) and [VS Code Extension](https://github.com/lf-lang/vscode-lingua-franca).
 
 # Motivation
 [motivation]: #motivation
@@ -14,13 +14,14 @@ When developing an LF program, developers often find themselves repeatedly using
 
 Therefore, establishing a clear and structured project layout is crucial, especially when aiming to share the project with colleagues or the community. The latest features of the [Lingo Package Manager](https://github.com/lf-lang/lingo) enable developers to incorporate other LF projects into their own. This enhancement significantly improves the developer experience by facilitating the use of pre-existing reactors, thereby fostering a more collaborative development environment. By leveraging Lingo, developers can seamlessly integrate and expand upon existing work, which reduces redundancy and accelerates development.
 
-Moreover, the latest developments in the [VS Code Extension](https://github.com/lf-lang/vscode-lingua-franca) include the introduction of a [Lingua Franca Package Explorer](https://github.com/lf-lang/lingo/wiki/Lingua-Franca-%E2%80%90-VS-Code-Extension). This tool allows users to easily search for and import pre-existing reactors into their current projects. These libraries can originate from two sources: those crafted by the programmer within their local workspace (Local Libraries) and those downloaded using the Lingo Package Manager (Lingo Libraries). This feature significantly enhances productivity and encourages the use of well-tested, modular code components. However, to effectively manage and list these libraries of reactors, it's essential to establish a designated access point within the project structure. This is typically achieved through a centralized directory, ensuring developers can seamlessly access and manage these libraries. This structured approach prevents the non-systematic scattering of libraries throughout the project, promoting organization and ease of maintenance.
+Moreover, the latest developments in the [VS Code Extension](https://github.com/lf-lang/vscode-lingua-franca) include the introduction of a [Lingua Franca Package Explorer](https://github.com/lf-lang/vscode-lingua-franca/blob/extending/LF_PACKAGE_EXPLORER.md). This tool allows users to easily search for and import pre-existing reactors into their current projects. These libraries can originate from two sources: those crafted by the programmer within their local workspace (Local Libraries) and those downloaded using the Lingo Package Manager (Lingo Libraries). This feature significantly enhances productivity and encourages the use of well-tested, modular code components. However, to effectively manage and list these libraries of reactors, it's essential to establish a designated access point within the project structure. This is typically achieved through a centralized directory, ensuring developers can seamlessly access and manage these libraries. This structured approach prevents the non-systematic scattering of libraries throughout the project, promoting organization and ease of maintenance.
 
 Maintaining a fixed structure is crucial because it allows developers to quickly identify where specific components, configurations, and resources are located, which in turn reduces the time spent searching for files and fosters efficient collaboration among team members. Therefore, to achieve these objective, this RFC proposes implementing a clear and standardized project structure for developers to follow. This standardized approach ensures projects are consistently organized, making them easier to comprehend, maintain, and share. Moreover, this structure facilitates the integration of external libraries and tools, thereby fostering a more collaborative development environment.
 
 # Proposed Implementation
 [proposed-implementation]: #proposed-implementation
 
+### New project Structure
 The current structure of a LF project is organized as follows:
 
 ```shell
@@ -47,12 +48,37 @@ The refined structure will appear as follows:
 │   │   └── ComputerVision.lf # Ex: reactor performing computer vision tasks (e.g., object detection, face recognition)
 │   ├── src/
 │   ├── src-gen/
-│   ├── fed-gen/              # Only for federated programs (instead of src-gen)
-│   └── Lingo.toml            # Configuration file for Lingo Package Manager
+│   ├── fed-gen/ # Only for federated programs (instead of src-gen)
+│   └── Lingo.toml # Configuration file for Lingo Package Manager
 ```
-The `lib/` directory is intended to store only reusable reactors, allowing them to be shared across multiple projects and reducing the need for reimplementation. The `src/` folder, on the other hand, is for executable programs that might use reactors defined in the `lib/` folder to develop a program. Generally, `src/` should contain only files that the developer compiles and executes.
+The `lib/` directory is intended to store only reusable reactors, allowing them to be shared across multiple projects and reducing the need for reimplementation. The `src/` folder, on the other hand, is for executable programs that might use reactors defined in the `lib/` folder to develop a program. Generally, `src/` should contain only files that the developer compiles and executes. Note that the content of directories such as `src-gen`, `fed-gen`, and `include` are outside the scope of this RFC.
 
 This structured approach promotes efficient code reuse, simplifies integration of external resources, and fosters collaborative development practices within the LF community.
+
+### Supporting reactors
+[supporting-reactors]: #supporting-reactors
+
+According to this proposal, the `lib/` directory is designated for reusable reactors, while the `src/` directory is reserved for executable programs. In some projects, there may be reactors that are used internally by a library but are not intended to be exposed to its users. These can be considered "supporting reactors." To clearly mark such reactors as internal and not for public use, we propose using a `private/` directory within the `lib/` folder. This directory can exist at any level of hierarchy within `lib/` and signifies that its contents are private and should not be exposed to users.
+
+For example:
+
+```shell
+├── root
+│   ├── bin/
+│   ├── include/
+│   ├── lib/
+│   │   ├── Input.lf
+│   │   ├── ComputerVision.lf
+│   │   └── private/
+│   │       ├── SupportingReactor1.lf
+│   │       └── SupportingReactor2.lf
+│   ├── src/
+│   ├── src-gen/
+│   ├── fed-gen/  # Only for federated programs (instead of src-gen)
+│   └── Lingo.toml
+```
+
+In this structure, the `private/` directory contains `SupportingReactor1.lf` and `SupportingReactor2.lf`. These reactors are intended to be extended by other reactors or imported for specific functions, but are not meant to be exposed to users of the library. This convention helps maintain a clear separation between public and internal components of the library.
 
 # Drawbacks
 [drawbacks]: #drawbacks
@@ -81,7 +107,7 @@ Another approach could involve placing the lib/ folder under the src/ directory,
 │   │   ├── Main.lf
 │   └── ...
 ```
-This structure nests the lib/ folder within src/, organizing reusable reactors alongside other source files. This approach may enhance clarity and organization, but it may also lead to potential conflicts or inconsistencies in the codebase.
+This structure nests the `lib/` folder within `src/`, organizing reusable reactors alongside other source files. This approach may enhance clarity and organization, but it may also lead to potential conflicts or inconsistencies in the codebase.
 
 # Unresolved questions
 [unresolved-questions]: #unresolved-questions
@@ -90,7 +116,7 @@ Here are some questions worth considering:
 
 1. Do you think it's beneficial to have a separate `lib/` directory for reusable reactors?
 
-2. Since the `lib/` directory is intended for reusable reactors and the `src/` directory is for executable programs, where should we store ***supporting reactors*** that are neither main nor intended to be reusable? By ***supporting reactors*** we refer to reactors that are used internally by a library but are not expected to be exposed to its users.
+2. Is the proposed design for ‘supporting reactors,’ which involves using a `private/` directory within the `lib/` folder to differentiate between private and exposed reactors, acceptable?
 
 # Future possibilities
 [future-possibilities]: #future-possibilities
