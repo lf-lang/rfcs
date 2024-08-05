@@ -109,15 +109,6 @@ Another approach could involve placing the lib/ folder under the src/ directory,
 ```
 This structure nests the `lib/` folder within `src/`, organizing reusable reactors alongside other source files. This approach may enhance clarity and organization, but it may also lead to potential conflicts or inconsistencies in the codebase.
 
-# Unresolved questions
-[unresolved-questions]: #unresolved-questions
-
-Here are some questions worth considering:
-
-1. Do you think it's beneficial to have a separate `lib/` directory for reusable reactors?
-
-2. Is the proposed design for ‘supporting reactors,’ which involves using a `private/` directory within the `lib/` folder to differentiate between private and exposed reactors, acceptable?
-
 # Future possibilities
 [future-possibilities]: #future-possibilities
 
