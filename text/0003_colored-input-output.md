@@ -55,7 +55,7 @@ More synthesis options might not be that distracting once klighd-vscode adds fav
 [prior-art]: #prior-art
 
 - SCCharts uses a light blue to highlight clicked edges
-- In my opinion the Magnition has created the only big LF models, hence I take their feedback seriously.
+- The large LF models that Magnition is working with pose real, practical UX challenges.
 
 
 # Unresolved questions
