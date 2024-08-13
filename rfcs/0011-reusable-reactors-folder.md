@@ -22,7 +22,7 @@ Maintaining a fixed structure is crucial because it allows developers to quickly
 [proposed-implementation]: #proposed-implementation
 
 ### New project Structure
-The current structure of a LF project is organized as follows:
+Currently, the structure of an LF package is organized something like this:
 
 ```shell
 ├── root
