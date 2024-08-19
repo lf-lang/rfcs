@@ -35,7 +35,7 @@ Currently, the structure of an LF package is organized something like this:
 
 To enhance the project structure, the following additions are proposed:
 
-- **`lib/`**: Directory for storing reusable reactors.
+- **`src/lib/`**: Directory for storing reusable reactors.
 - **`Lingo.toml`**: Configuration file crucial for project sharing, storing Lingo configuration details including external LF projects to include (refer to [Lingo Documentation](https://github.com/lf-lang/lingo?tab=readme-ov-file#the-toml-based-package-configurations) for further details). The internal structure of this file will be discussed in another RFC.
 
 The refined structure will appear as follows:
@@ -43,22 +43,22 @@ The refined structure will appear as follows:
 ├── root
 │   ├── bin/
 │   ├── include/
-│   ├── lib/ # Directory for storing reusable reactors
-│   │   ├── Input.lf # Ex: reactor capturing external inputs (e.g., Microphone, Camera)
-│   │   └── ComputerVision.lf # Ex: reactor performing computer vision tasks (e.g., object detection, face recognition)
 │   ├── src/
+│   │  ├── lib/ # Directory for storing reusable reactors
+│   │  │   ├── Input.lf # Ex: reactor capturing external inputs (e.g., Microphone, Camera)
+│   │  │   └── ComputerVision.lf # Ex: reactor performing computer vision tasks (e.g., object detection, face recognition)
 │   ├── src-gen/
 │   ├── fed-gen/ # Only for federated programs (instead of src-gen)
 │   └── Lingo.toml # Configuration file for Lingo Package Manager
 ```
-The `lib/` directory is intended to store only reusable reactors, allowing them to be shared across multiple projects and reducing the need for reimplementation. The `src/` folder, on the other hand, is for executable programs that might use reactors defined in the `lib/` folder to develop a program. Generally, `src/` should contain only files that the developer compiles and executes. Note that the content of directories such as `src-gen`, `fed-gen`, and `include` are outside the scope of this RFC.
+The `lib/` directory within the `src/` folder is designated for reusable reactors, making them shareable across multiple projects and minimizing the need for reimplementation. In contrast, the rest of the `src/` folder is reserved for executable programs that may utilize reactors from the `src/lib/` directory during development. Note that the content of directories such as `src-gen`, `fed-gen`, and `include` are outside the scope of this RFC.
 
 This structured approach promotes efficient code reuse, simplifies integration of external resources, and fosters collaborative development practices within the LF community.
 
 ### Supporting reactors
 [supporting-reactors]: #supporting-reactors
 
-According to this proposal, the `lib/` directory is designated for reusable reactors, while the `src/` directory is reserved for executable programs. In some projects, there may be reactors that are used internally by a library but are not intended to be exposed to its users. These can be considered "supporting reactors." To clearly mark such reactors as internal and not for public use, we propose using a `private/` directory within the `lib/` folder. This directory can exist at any level of hierarchy within `lib/` and signifies that its contents are private and should not be exposed to users.
+According to this proposal, the `src/lib/` directory is designated for reusable reactors, while the rest of `src/` directory is reserved for executable programs. In some projects, there may be reactors that are used internally by a library but are not intended to be exposed to its users. These can be considered "supporting reactors". Currently, the Lingua Franca language lacks of visibility concept, so there's no clear way to designate certain reactors as internal and not intended for public use at language level. To address this, we propose adopting a convention of using a `private/` directory within the `lib/` folder. This directory can be placed at any level within `lib/`, indicating that its contents are private and should not be exposed to users. It's important to note that this is purely a suggested convention, not something to be enforced at the language or compiler level.
 
 For example:
 
@@ -66,19 +66,19 @@ For example:
 ├── root
 │   ├── bin/
 │   ├── include/
-│   ├── lib/
-│   │   ├── Input.lf
-│   │   ├── ComputerVision.lf
-│   │   └── private/
-│   │       ├── SupportingReactor1.lf
-│   │       └── SupportingReactor2.lf
 │   ├── src/
+│   │   ├── lib/
+│   │   │   ├── Input.lf
+│   │   │   ├── ComputerVision.lf
+│   │   │   └── private/
+│   │   │       ├── SupportingReactor1.lf
+│   │   │       └── SupportingReactor2.lf
 │   ├── src-gen/
 │   ├── fed-gen/  # Only for federated programs (instead of src-gen)
 │   └── Lingo.toml
 ```
 
-In this structure, the `private/` directory contains `SupportingReactor1.lf` and `SupportingReactor2.lf`. These reactors are intended to be extended by other reactors or imported for specific functions, but are not meant to be exposed to users of the library. This convention helps maintain a clear separation between public and internal components of the library.
+In this structure, the `private/` directory contains `SupportingReactor1.lf` and `SupportingReactor2.lf`. These reactors are intended to be extended by other reactors or imported for specific functions, but are not meant to be exposed to the library’s end users (i.e., developers). This convention helps maintain a clear separation between public and internal components of the library.
 
 # Drawbacks
 [drawbacks]: #drawbacks
@@ -96,18 +96,6 @@ The folder containing reusable reactors has been named `lib/` since the idea is 
 - `libraries/`, `lfc_libraries/` or `lfc_lib/`
 - `reusables/`
 - `modules/`
-
-### Alternative Design Approach
-Another approach could involve placing the lib/ folder under the src/ directory, as illustrated below:
-```shell
-├── root
-│   ├── ...
-│   ├── src/
-│   │   ├── lib/ # Directory for storing reusable reactors
-│   │   ├── Main.lf
-│   └── ...
-```
-This structure nests the `lib/` folder within `src/`, organizing reusable reactors alongside other source files. This approach may enhance clarity and organization, but it may also lead to potential conflicts or inconsistencies in the codebase.
 
 # Future possibilities
 [future-possibilities]: #future-possibilities
