@@ -96,7 +96,7 @@ The folder containing reusable reactors has been named `./src/lib/` since the id
 - `libraries/`, `lfc_libraries/` or `lfc_lib/`
 - `reusables/`
 - `modules/`
- - `lib/`
+- `lib/`
  
 # Future possibilities
 [future-possibilities]: #future-possibilities
