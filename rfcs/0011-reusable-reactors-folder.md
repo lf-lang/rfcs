@@ -90,13 +90,14 @@ Here are some potential drawbacks of this proposal:
 # Rationale and alternatives
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-### Alternative Names for the `lib/` Folder
-The folder containing reusable reactors has been named `lib/` since the idea is to have a centralized location for all reusable reactors that can be imported into other projects, similar to how libraries are used in other programming languages. However, we’re open to discussing different names for this folder if the proposed one causes confusion among developers. Some alternative names that could be considered include:
+### Alternative Names for the `./src/lib/` Folder
+The folder containing reusable reactors has been named `./src/lib/` since the idea is to have a centralized location for all reusable reactors that can be imported into other projects, similar to how libraries are used in other programming languages. However, we’re open to discussing different names for this folder if the proposed one causes confusion among developers. Some alternative names that could be considered include:
 - `reactors_lib/` or `lfc_reactors/`
 - `libraries/`, `lfc_libraries/` or `lfc_lib/`
 - `reusables/`
 - `modules/`
-
+ - `lib/`
+ 
 # Future possibilities
 [future-possibilities]: #future-possibilities
 
