@@ -97,8 +97,5 @@ The folder containing reusable reactors has been named `./src/lib/` since the id
 - `reusables/`
 - `modules/`
 - `lib/`
- 
-# Future possibilities
-[future-possibilities]: #future-possibilities
 
 
